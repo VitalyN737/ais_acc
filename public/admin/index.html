@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sveltia CMS | Vitaly Yushmanov</title>
     <link rel="cms-config-url" type="text/yaml" href="config.yml" />
-    <script src="https://cdn.jsdelivr.net/npm/sveltia-cms/dist/sveltia-cms.js" type="module"></script>
   </head>
   <body>
     <div id="cms"></div>
+    <script>
+      console.log("Admin page loaded");
+      fetch("config.yml").then(r => console.log("config.yml status:", r.status));
+    </script>
+    <script src="https://unpkg.com/sveltia-cms" type="module"></script>
   </body>
 </html>
