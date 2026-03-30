@@ -3,15 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sveltia CMS | Vitaly Yushmanov</title>
+    <title>Admin | Vitaly Yushmanov</title>
     <link rel="cms-config-url" type="text/yaml" href="config.yml" />
   </head>
   <body>
-    <div id="cms"></div>
-    <script>
-      console.log("Admin page loaded");
-      fetch("config.yml").then(r => console.log("config.yml status:", r.status));
-    </script>
-    <script src="https://esm.sh/sveltia-cms" type="module"></script>
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   </body>
 </html>
