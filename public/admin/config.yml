@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: VitalyN737/ais # Replace with your actual GitHub username/repository
+  repo: VitalyN737/ais_acc # Replace with your actual GitHub username/repository
   branch: main
   auth_type: token
 
