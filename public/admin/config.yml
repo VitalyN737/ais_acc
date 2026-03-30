@@ -1,13 +1,12 @@
 backend:
   name: github
-  repo: VitalyN737/ais_acc # Replace with your actual GitHub username/repository
+  repo: VitalyN737/ais_acc
   branch: main
   auth_type: token
 
 site_url: https://24x365days.com
 display_url: https://24x365days.com
 
-# Enable local development
 local_backend: false
 
 media_folder: "public/images/uploads"
