@@ -1,5 +1,5 @@
 {
-  "name": "",
-  "description": "",
+  "name": "AIS Account Manager",
+  "description": "A tool for managing accounts and integration with AI Studio.",
   "requestFramePermissions": []
 }

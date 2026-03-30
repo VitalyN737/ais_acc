@@ -26,7 +26,7 @@ import {
   Menu,
   X
 } from "lucide-react";
-import { BrowserRouter, Routes, Route, Link, useLocation, useParams } from "react-router-dom";
+import { HashRouter, Routes, Route, Link, useLocation, useParams } from "react-router-dom";
 import React, { useState, useEffect, createContext, useContext } from "react";
 import Markdown from "react-markdown";
 import { fetchJson, fetchCollection } from "./services/dataService";
@@ -902,7 +902,7 @@ const RepertoireDetail = () => {
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { footerData } = useData();
+  const { footerData, refreshData } = useData();
 
   // Close menu when location changes
   useEffect(() => {
@@ -941,7 +941,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <Music className="size-8" />
             </div>
             <div className="flex flex-col">
-              <h2 className="text-lg font-black leading-none tracking-tight">VITALY YUSHMANOV</h2>
+              <h2 className="text-lg font-black leading-none tracking-tight uppercase">VITALY YUSHMANOV</h2>
               <span className="text-[10px] uppercase tracking-[0.2em] text-primary/80 font-bold">Baritone</span>
             </div>
           </Link>
@@ -959,6 +959,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </nav>
 
           <div className="flex items-center gap-3">
+            <button 
+              onClick={refreshData}
+              className="hidden md:flex items-center justify-center size-10 rounded-lg glass hover:bg-white/10 transition-all text-slate-400 hover:text-primary"
+              title="Refresh Content"
+            >
+              <Rss className="size-4" />
+            </button>
             <div className="hidden lg:flex gap-3">
               <Link 
                 to="/repertoire" 
@@ -1081,46 +1088,52 @@ export default function App() {
   const [repertoireItems, setRepertoireItems] = useState<any[]>([]);
   const [cds, setCds] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const timestamp = Date.now();
+      console.log(`Fetching data with timestamp: ${timestamp}`);
+      const [
+        home, profile, contact, footer,
+        newsData, perfData, galleryData, mediaData, repData, cdsData
+      ] = await Promise.all([
+        fetchJson('home.json'),
+        fetchJson('profile.json'),
+        fetchJson('contact.json'),
+        fetchJson('footer.json'),
+        fetchCollection('news'),
+        fetchCollection('performances'),
+        fetchCollection('gallery'),
+        fetchCollection('media'),
+        fetchCollection('repertoire'),
+        fetchCollection('cds')
+      ]);
+
+      console.log("Data fetched successfully:", { home, profile });
+      setHomeData(home);
+      setProfileData(profile);
+      setContactData(contact);
+      setFooterData(footer);
+      setNews(newsData);
+      setPerformances(perfData);
+      setGalleryItems(galleryData);
+      setMediaItems(mediaData);
+      setRepertoireItems(repData);
+      setCds(cdsData);
+    } catch (error) {
+      console.error("Error loading live data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    async function loadData() {
-      try {
-        const [
-          home, profile, contact, footer,
-          newsData, perfData, galleryData, mediaData, repData, cdsData
-        ] = await Promise.all([
-          fetchJson('home.json'),
-          fetchJson('profile.json'),
-          fetchJson('contact.json'),
-          fetchJson('footer.json'),
-          fetchCollection('news'),
-          fetchCollection('performances'),
-          fetchCollection('gallery'),
-          fetchCollection('media'),
-          fetchCollection('repertoire'),
-          fetchCollection('cds')
-        ]);
-
-        setHomeData(home);
-        setProfileData(profile);
-        setContactData(contact);
-        setFooterData(footer);
-        setNews(newsData);
-        setPerformances(perfData);
-        setGalleryItems(galleryData);
-        setMediaItems(mediaData);
-        setRepertoireItems(repData);
-        setCds(cdsData);
-      } catch (error) {
-        console.error("Error loading live data:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
     loadData();
-  }, []);
+  }, [refreshKey]);
 
-  if (loading) {
+  if (loading && refreshKey === 0) {
     return (
       <div className="min-h-screen bg-[#0A141F] text-white flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -1133,12 +1146,13 @@ export default function App() {
 
   const dataValue = {
     homeData, profileData, contactData, footerData,
-    news, performances, galleryItems, mediaItems, repertoireItems, cds
+    news, performances, galleryItems, mediaItems, repertoireItems, cds,
+    refreshData: () => setRefreshKey(prev => prev + 1)
   };
 
   return (
     <DataContext.Provider value={dataValue}>
-      <BrowserRouter>
+      <HashRouter>
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -1158,7 +1172,7 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </Layout>
-      </BrowserRouter>
+      </HashRouter>
     </DataContext.Provider>
   );
 }
