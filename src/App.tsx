@@ -27,30 +27,37 @@ import {
   X
 } from "lucide-react";
 import { BrowserRouter, Routes, Route, Link, useLocation, useParams } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import Markdown from "react-markdown";
-import profileData from "./content/profile.json";
-import homeData from "./content/home.json";
-import contactData from "./content/contact.json";
-import footerData from "./content/footer.json";
+import { fetchJson, fetchCollection } from "./services/dataService";
 
-const newsFiles = import.meta.glob('./content/news/*.json', { eager: true });
-const news = Object.values(newsFiles).map((module: any) => module.default);
+// Initial placeholders to prevent crashes before fetch
+const initialHome = { hero: { welcomeText: "", firstName: "", lastName: "", description: "", image: "", operaticRolesCount: "" } };
+const initialProfile = { name: "", bio: [], experience: 0, performances: 0, image: "" };
+const initialContact = { title: "", description: "", management: { name: "", location: "", email: "" } };
+const initialFooter = { copyright: "", links: [] };
 
-const performanceFiles = import.meta.glob('./content/performances/*.json', { eager: true });
-const performances = Object.values(performanceFiles).map((module: any) => module.default);
+const DataContext = createContext<any>(null);
 
-const galleryFiles = import.meta.glob('./content/gallery/*.json', { eager: true });
-const galleryItems = Object.values(galleryFiles).map((module: any) => module.default);
-
-const mediaFiles = import.meta.glob('./content/media/*.json', { eager: true });
-const mediaItems = Object.values(mediaFiles).map((module: any) => module.default);
-
-const repertoireFiles = import.meta.glob('./content/repertoire/*.json', { eager: true });
-const repertoireItems = Object.values(repertoireFiles).map((module: any) => module.default);
-
-const cdFiles = import.meta.glob('./content/cds/*.json', { eager: true });
-const cds = Object.values(cdFiles).map((module: any) => module.default);
+const useData = () => {
+  const context = useContext(DataContext);
+  if (!context) {
+    // Fallback for components rendered outside the provider (shouldn't happen with current structure)
+    return {
+      homeData: initialHome,
+      profileData: initialProfile,
+      contactData: initialContact,
+      footerData: initialFooter,
+      news: [],
+      performances: [],
+      galleryItems: [],
+      mediaItems: [],
+      repertoireItems: [],
+      cds: []
+    };
+  }
+  return context;
+};
 
 const PageWrapper = ({ children }: { children: React.ReactNode }) => (
   <motion.div
@@ -63,9 +70,11 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => (
   </motion.div>
 );
 
-const Home = () => (
-  <PageWrapper>
-    <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-10">
+const Home = () => {
+  const { homeData, performances, news } = useData();
+  return (
+    <PageWrapper>
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-10">
       <div className="lg:col-span-7 flex flex-col gap-6 order-2 lg:order-1">
         <div className="flex flex-col gap-2">
           <span className="text-slate-400 font-bold tracking-[0.3em] uppercase text-sm">{homeData.hero.welcomeText}</span>
@@ -179,11 +188,14 @@ const Home = () => (
       </div>
     </section>
   </PageWrapper>
-);
+  );
+};
 
-const Schedule = () => (
-  <PageWrapper>
-    <div className="py-10">
+const Schedule = () => {
+  const { performances } = useData();
+  return (
+    <PageWrapper>
+      <div className="py-10">
       <h2 className="text-4xl font-black mb-10 tracking-tight">Performance Schedule</h2>
       <div className="flex flex-col gap-6">
         {performances.map((perf, idx) => (
@@ -217,11 +229,14 @@ const Schedule = () => (
       </div>
     </div>
   </PageWrapper>
-);
+  );
+};
 
-const News = () => (
-  <PageWrapper>
-    <div className="py-10">
+const News = () => {
+  const { news } = useData();
+  return (
+    <PageWrapper>
+      <div className="py-10">
       <h2 className="text-4xl font-black mb-10 tracking-tight">Latest News & Updates</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {[...news, ...news].map((item, idx) => (
@@ -248,11 +263,14 @@ const News = () => (
       </div>
     </div>
   </PageWrapper>
-);
+  );
+};
 
-const Profile = () => (
-  <PageWrapper>
-    <div className="py-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+const Profile = () => {
+  const { profileData } = useData();
+  return (
+    <PageWrapper>
+      <div className="py-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
       <div className="flex flex-col gap-8">
         <div>
           <span className="text-primary font-bold tracking-[0.3em] uppercase text-sm mb-2 block">Biography</span>
@@ -286,11 +304,14 @@ const Profile = () => (
       </div>
     </div>
   </PageWrapper>
-);
+  );
+};
 
-const Gallery = () => (
-  <PageWrapper>
-    <div className="py-10">
+const Gallery = () => {
+  const { galleryItems } = useData();
+  return (
+    <PageWrapper>
+      <div className="py-10">
       <h2 className="text-4xl font-black mb-10 tracking-tight">Gallery</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {galleryItems.map((item) => (
@@ -310,11 +331,14 @@ const Gallery = () => (
       </div>
     </div>
   </PageWrapper>
-);
+  );
+};
 
-const Media = () => (
-  <PageWrapper>
-    <div className="py-10">
+const Media = () => {
+  const { mediaItems } = useData();
+  return (
+    <PageWrapper>
+      <div className="py-10">
       <h2 className="text-4xl font-black mb-10 tracking-tight">Media & Recordings</h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div className="flex flex-col gap-6">
@@ -370,11 +394,14 @@ const Media = () => (
       </div>
     </div>
   </PageWrapper>
-);
+  );
+};
 
-const CD = () => (
-  <PageWrapper>
-    <div className="py-10">
+const CD = () => {
+  const { cds } = useData();
+  return (
+    <PageWrapper>
+      <div className="py-10">
       <h2 className="text-4xl font-black mb-10 tracking-tight">Discography</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {cds.filter(cd => cd.featured).map(cd => (
@@ -424,11 +451,14 @@ const CD = () => (
       </div>
     </div>
   </PageWrapper>
-);
+  );
+};
 
-const Repertoire = () => (
-  <PageWrapper>
-    <div className="py-10">
+const Repertoire = () => {
+  const { repertoireItems } = useData();
+  return (
+    <PageWrapper>
+      <div className="py-10">
       <h2 className="text-4xl font-black mb-10 tracking-tight">Repertoire</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div className="flex flex-col gap-8">
@@ -469,11 +499,14 @@ const Repertoire = () => (
       </div>
     </div>
   </PageWrapper>
-);
+  );
+};
 
-const Contact = () => (
-  <PageWrapper>
-    <div className="py-10 grid grid-cols-1 lg:grid-cols-2 gap-16">
+const Contact = () => {
+  const { contactData } = useData();
+  return (
+    <PageWrapper>
+      <div className="py-10 grid grid-cols-1 lg:grid-cols-2 gap-16">
       <div className="flex flex-col gap-8">
         <div>
           <span className="text-primary font-bold tracking-[0.3em] uppercase text-sm mb-2 block">Get in Touch</span>
@@ -533,11 +566,13 @@ const Contact = () => (
       </div>
     </div>
   </PageWrapper>
-);
+  );
+};
 
 const NewsDetail = () => {
   const { id } = useParams();
-  const item = news.find(n => n.id === id);
+  const { news } = useData();
+  const item = news.find((n: any) => n.id === id);
 
   if (!item) return <div className="py-20 text-center">News not found</div>;
 
@@ -576,7 +611,8 @@ const NewsDetail = () => {
 
 const PerformanceDetail = () => {
   const { id } = useParams();
-  const perf = performances.find(p => p.id === id);
+  const { performances } = useData();
+  const perf = performances.find((p: any) => p.id === id);
 
   if (!perf) return <div className="py-20 text-center">Performance not found</div>;
 
@@ -651,7 +687,8 @@ const PerformanceDetail = () => {
 
 const CDDetail = () => {
   const { id } = useParams();
-  const cd = cds.find(c => c.id === id);
+  const { cds } = useData();
+  const cd = cds.find((c: any) => c.id === id);
 
   if (!cd) return <div className="py-20 text-center">Album not found</div>;
 
@@ -719,7 +756,8 @@ const CDDetail = () => {
 
 const GalleryDetail = () => {
   const { id } = useParams();
-  const item = galleryItems.find(g => g.id === id);
+  const { galleryItems } = useData();
+  const item = galleryItems.find((g: any) => g.id === id);
 
   if (!item) return <div className="py-20 text-center">Image not found</div>;
 
@@ -743,7 +781,8 @@ const GalleryDetail = () => {
 
 const MediaDetail = () => {
   const { id } = useParams();
-  const item = mediaItems.find(m => m.id === id);
+  const { mediaItems } = useData();
+  const item = mediaItems.find((m: any) => m.id === id);
 
   if (!item) return <div className="py-20 text-center">Media not found</div>;
 
@@ -817,7 +856,8 @@ const MediaDetail = () => {
 
 const RepertoireDetail = () => {
   const { id } = useParams();
-  const item = repertoireItems.find(r => r.id === id);
+  const { repertoireItems } = useData();
+  const item = repertoireItems.find((r: any) => r.id === id);
 
   if (!item) return <div className="py-20 text-center">Repertoire item not found</div>;
 
@@ -862,6 +902,7 @@ const RepertoireDetail = () => {
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { footerData } = useData();
 
   // Close menu when location changes
   useEffect(() => {
@@ -1029,27 +1070,95 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default function App() {
+  const [homeData, setHomeData] = useState(initialHome);
+  const [profileData, setProfileData] = useState(initialProfile);
+  const [contactData, setContactData] = useState(initialContact);
+  const [footerData, setFooterData] = useState(initialFooter);
+  const [news, setNews] = useState<any[]>([]);
+  const [performances, setPerformances] = useState<any[]>([]);
+  const [galleryItems, setGalleryItems] = useState<any[]>([]);
+  const [mediaItems, setMediaItems] = useState<any[]>([]);
+  const [repertoireItems, setRepertoireItems] = useState<any[]>([]);
+  const [cds, setCds] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [
+          home, profile, contact, footer,
+          newsData, perfData, galleryData, mediaData, repData, cdsData
+        ] = await Promise.all([
+          fetchJson('home.json'),
+          fetchJson('profile.json'),
+          fetchJson('contact.json'),
+          fetchJson('footer.json'),
+          fetchCollection('news'),
+          fetchCollection('performances'),
+          fetchCollection('gallery'),
+          fetchCollection('media'),
+          fetchCollection('repertoire'),
+          fetchCollection('cds')
+        ]);
+
+        setHomeData(home);
+        setProfileData(profile);
+        setContactData(contact);
+        setFooterData(footer);
+        setNews(newsData);
+        setPerformances(perfData);
+        setGalleryItems(galleryData);
+        setMediaItems(mediaData);
+        setRepertoireItems(repData);
+        setCds(cdsData);
+      } catch (error) {
+        console.error("Error loading live data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0A141F] text-white flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="size-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-slate-400 font-bold tracking-widest uppercase text-xs">Loading Live Content...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const dataValue = {
+    homeData, profileData, contactData, footerData,
+    news, performances, galleryItems, mediaItems, repertoireItems, cds
+  };
+
   return (
-    <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/schedule/:id" element={<PerformanceDetail />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/news/:id" element={<NewsDetail />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/gallery/:id" element={<GalleryDetail />} />
-          <Route path="/media" element={<Media />} />
-          <Route path="/media/:id" element={<MediaDetail />} />
-          <Route path="/cd" element={<CD />} />
-          <Route path="/cd/:id" element={<CDDetail />} />
-          <Route path="/repertoire" element={<Repertoire />} />
-          <Route path="/repertoire/:id" element={<RepertoireDetail />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
-      </Layout>
-    </BrowserRouter>
+    <DataContext.Provider value={dataValue}>
+      <BrowserRouter>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/schedule/:id" element={<PerformanceDetail />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/news/:id" element={<NewsDetail />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/gallery/:id" element={<GalleryDetail />} />
+            <Route path="/media" element={<Media />} />
+            <Route path="/media/:id" element={<MediaDetail />} />
+            <Route path="/cd" element={<CD />} />
+            <Route path="/cd/:id" element={<CDDetail />} />
+            <Route path="/repertoire" element={<Repertoire />} />
+            <Route path="/repertoire/:id" element={<RepertoireDetail />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </Layout>
+      </BrowserRouter>
+    </DataContext.Provider>
   );
 }

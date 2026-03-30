@@ -7,7 +7,7 @@ backend:
 site_url: https://24x365days.com
 display_url: https://24x365days.com
 
-local_backend: false
+local_backend: true
 
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
