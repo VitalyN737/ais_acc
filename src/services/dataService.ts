@@ -1,6 +1,16 @@
 const GITHUB_RAW_BASE = "https://raw.githubusercontent.com/VitalyN737/ais_acc/main/src/content";
 const GITHUB_API_BASE = "https://api.github.com/repos/VitalyN737/ais_acc/contents/src/content";
 
+// Fallback list of files in case GitHub API is rate-limited and manifest is missing
+const FALLBACK_MANIFEST: Record<string, string[]> = {
+  news: ["european-tour-2024.json"],
+  performances: [],
+  gallery: [],
+  media: [],
+  repertoire: [],
+  cds: []
+};
+
 export async function fetchJson(path: string) {
   const url = `${GITHUB_RAW_BASE}/${path}${path.includes('?') ? '&' : '?'}t=${Date.now()}`;
   console.log(`Fetching JSON: ${url}`);
@@ -10,20 +20,34 @@ export async function fetchJson(path: string) {
 }
 
 export async function fetchCollection(collectionName: string) {
-  const url = `${GITHUB_API_BASE}/${collectionName}?t=${Date.now()}`;
-  console.log(`Fetching Collection List: ${url}`);
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`Failed to fetch collection ${collectionName}`);
-  const files = await response.json();
-  
-  const dataPromises = files
-    .filter((file: any) => file.name.endsWith('.json'))
-    .map(async (file: any) => {
-      const downloadUrl = `${file.download_url}${file.download_url.includes('?') ? '&' : '?'}t=${Date.now()}`;
-      console.log(`Fetching Collection Item: ${downloadUrl}`);
-      const res = await fetch(downloadUrl);
-      return res.json();
-    });
+  try {
+    // 1. Try to fetch from GitHub API (might fail due to rate limits)
+    const url = `${GITHUB_API_BASE}/${collectionName}?t=${Date.now()}`;
+    console.log(`Attempting API fetch for ${collectionName}: ${url}`);
+    const response = await fetch(url);
     
+    if (response.ok) {
+      const files = await response.json();
+      const dataPromises = files
+        .filter((file: any) => file.name.endsWith('.json'))
+        .map(async (file: any) => {
+          const downloadUrl = `${file.download_url}${file.download_url.includes('?') ? '&' : '?'}t=${Date.now()}`;
+          const res = await fetch(downloadUrl);
+          return res.json();
+        });
+      return Promise.all(dataPromises);
+    }
+    
+    if (response.status === 403) {
+      console.warn(`GitHub API Rate Limit hit for ${collectionName}. Using fallback.`);
+    }
+  } catch (e) {
+    console.error(`Error fetching collection ${collectionName} via API:`, e);
+  }
+
+  // 2. Fallback: Fetch known files directly from RAW (bypasses API limits)
+  console.log(`Using fallback for ${collectionName}`);
+  const fallbackFiles = FALLBACK_MANIFEST[collectionName] || [];
+  const dataPromises = fallbackFiles.map(file => fetchJson(`${collectionName}/${file}`));
   return Promise.all(dataPromises);
 }
