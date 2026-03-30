@@ -36,7 +36,10 @@ collections:
         fields:
           - { label: "Name", name: "name", widget: "string" }
           - { label: "Title", name: "title", widget: "string" }
-          - { label: "Bio Paragraphs", name: "bio", widget: "list", field: { label: "Bio Paragraph", name: "paragraph", widget: "text" } }
+          - label: "Bio Paragraphs"
+            name: "bio"
+            widget: "list"
+            field: { label: "Bio Paragraph", name: "paragraph", widget: "text" }
           - { label: "Experience Years", name: "experience", widget: "number" }
           - { label: "Performance Count", name: "performances", widget: "number" }
           - { label: "Profile Image", name: "image", widget: "image" }
@@ -145,4 +148,7 @@ collections:
         name: "footer"
         fields:
           - { label: "Copyright Text", name: "copyright", widget: "string" }
-          - { label: "Footer Links", name: "links", widget: "list", field: { label: "Link", name: "link", widget: "string" } }
+          - label: "Footer Links"
+            name: "links"
+            widget: "list"
+            field: { label: "Link", name: "link", widget: "string" }
