@@ -20,12 +20,16 @@ collections:
         label: "Home Page Content"
         name: "home"
         fields:
-          - { label: "Hero Welcome Text", name: "hero.welcomeText", widget: "string" }
-          - { label: "Hero First Name", name: "hero.firstName", widget: "string" }
-          - { label: "Hero Last Name", name: "hero.lastName", widget: "string" }
-          - { label: "Hero Description", name: "hero.description", widget: "text" }
-          - { label: "Hero Image", name: "hero.image", widget: "image" }
-          - { label: "Operatic Roles Count", name: "hero.operaticRolesCount", widget: "string" }
+          - name: "hero"
+            label: "Hero Section"
+            widget: "object"
+            fields:
+              - { label: "Welcome Text", name: "welcomeText", widget: "string" }
+              - { label: "First Name", name: "firstName", widget: "string" }
+              - { label: "Last Name", name: "lastName", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+              - { label: "Image", name: "image", widget: "image" }
+              - { label: "Operatic Roles Count", name: "operaticRolesCount", widget: "string" }
 
   - name: "profile"
     label: "Profile"
@@ -136,9 +140,13 @@ collections:
         fields:
           - { label: "Title", name: "title", widget: "string" }
           - { label: "Description", name: "description", widget: "text" }
-          - { label: "Management Name", name: "management.name", widget: "string" }
-          - { label: "Management Location", name: "management.location", widget: "string" }
-          - { label: "Management Email", name: "management.email", widget: "string" }
+          - name: "management"
+            label: "Management"
+            widget: "object"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Location", name: "location", widget: "string" }
+              - { label: "Email", name: "email", widget: "string" }
 
   - name: "footer"
     label: "Footer"
