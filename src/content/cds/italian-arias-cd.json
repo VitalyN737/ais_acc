@@ -1,0 +1,15 @@
+{
+  "id": "italian-arias-cd",
+  "title": "Italian Arias",
+  "year": "2022",
+  "description": "A collection of the most beloved baritone arias from the Italian operatic tradition.",
+  "image": "https://picsum.photos/seed/cd1/800/800",
+  "featured": false,
+  "body": "A journey through the golden age of Italian opera. Vitaly Yushmanov performs iconic arias from Verdi, Puccini, and Donizetti, showcasing the bel canto tradition at its finest.",
+  "tracks": [
+    "Verdi: La Traviata - Di Provenza il mar",
+    "Puccini: La Bohème - O Mimì, tu più non torni",
+    "Mozart: Don Giovanni - Deh, vieni alla finestra",
+    "Verdi: Don Carlo - Per me giunto"
+  ]
+}

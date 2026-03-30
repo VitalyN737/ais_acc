@@ -1,0 +1,15 @@
+{
+  "id": "rachmaninoff-songs-cd",
+  "title": "Rachmaninoff Songs",
+  "year": "2020",
+  "description": "Intimate interpretations of Sergei Rachmaninoff's vocal masterpieces.",
+  "image": "https://picsum.photos/seed/cd2/800/800",
+  "featured": false,
+  "body": "A collection of Rachmaninoff's most poignant and beautiful songs. Vitaly Yushmanov's deep understanding of the Russian language and musical tradition brings these works to life.",
+  "tracks": [
+    "Rachmaninoff: Aleko - Ves' tabor spit",
+    "Rachmaninoff: In the Silence of the Secret Night",
+    "Rachmaninoff: Do Not Sing, My Beauty",
+    "Rachmaninoff: Spring Waters"
+  ]
+}

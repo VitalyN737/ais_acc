@@ -1,0 +1,15 @@
+{
+  "id": "verdi-highlights-cd",
+  "title": "Verdi: Highlights",
+  "year": "2018",
+  "description": "Powerful scenes from Verdi's greatest operas including Don Carlo and La Traviata.",
+  "image": "https://picsum.photos/seed/cd3/800/800",
+  "featured": false,
+  "body": "A compilation of Vitaly Yushmanov's most acclaimed Verdi performances. This album features highlights from his roles as Rodrigo and Germont.",
+  "tracks": [
+    "Verdi: Don Carlo - Per me giunto",
+    "Verdi: Don Carlo - O Carlo, ascolta",
+    "Verdi: La Traviata - Di Provenza il mar",
+    "Verdi: Rigoletto - Cortigiani, vil razza dannata"
+  ]
+}
