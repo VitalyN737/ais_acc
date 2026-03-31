@@ -1,0 +1,34 @@
+{
+  "news": [
+    "european-tour-2024.json",
+    "masterclass-tokyo-2024.json",
+    "slavic-soul-release.json"
+  ],
+  "performances": [
+    "liederabend-2024.json",
+    "tokyo-spring-2024.json",
+    "verdi-gala-2024.json"
+  ],
+  "gallery": [
+    "gallery-0.json"
+  ],
+  "media": [
+    "mozart-don-giovanni-audio.json",
+    "rachmaninoff-vocalise-video.json",
+    "schubert-winterreise-audio.json",
+    "tchaikovsky-onegin-video.json",
+    "tchaikovsky-queen-of-spades-audio.json",
+    "verdi-rigoletto-audio.json",
+    "verdi-traviata-video.json"
+  ],
+  "repertoire": [
+    "germont.json",
+    "onegin.json"
+  ],
+  "cds": [
+    "italian-arias-cd.json",
+    "rachmaninoff-songs-cd.json",
+    "slavic-soul-cd.json",
+    "verdi-highlights-cd.json"
+  ]
+}
