@@ -3,12 +3,38 @@ const GITHUB_API_BASE = "https://api.github.com/repos/VitalyN737/ais_acc/content
 
 // Fallback list of files in case GitHub API is rate-limited and manifest is missing
 const FALLBACK_MANIFEST: Record<string, string[]> = {
-  news: ["european-tour-2024.json"],
-  performances: [],
-  gallery: [],
-  media: [],
-  repertoire: [],
-  cds: []
+  news: [
+    "european-tour-2024.json",
+    "masterclass-tokyo-2024.json",
+    "slavic-soul-release.json"
+  ],
+  performances: [
+    "liederabend-2024.json",
+    "tokyo-spring-2024.json",
+    "verdi-gala-2024.json"
+  ],
+  gallery: [
+    "gallery-0.json"
+  ],
+  media: [
+    "mozart-don-giovanni-audio.json",
+    "rachmaninoff-vocalise-video.json",
+    "schubert-winterreise-audio.json",
+    "tchaikovsky-onegin-video.json",
+    "tchaikovsky-queen-of-spades-audio.json",
+    "verdi-rigoletto-audio.json",
+    "verdi-traviata-video.json"
+  ],
+  repertoire: [
+    "germont.json",
+    "onegin.json"
+  ],
+  cds: [
+    "italian-arias-cd.json",
+    "rachmaninoff-songs-cd.json",
+    "slavic-soul-cd.json",
+    "verdi-highlights-cd.json"
+  ]
 };
 
 export async function fetchJson(path: string) {
