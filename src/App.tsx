@@ -239,7 +239,7 @@ const News = () => {
       <div className="py-10">
       <h2 className="text-4xl font-black mb-10 tracking-tight">Latest News & Updates</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {[...news, ...news].map((item, idx) => (
+        {news.map((item, idx) => (
           <Link key={idx} to={`/news/${item.id}`}>
             <div className="glass-card rounded-[2rem] overflow-hidden group cursor-pointer border border-white/5 hover:border-primary/50 transition-all h-full">
               <div className="h-64 bg-cover bg-center overflow-hidden relative">

@@ -184,15 +184,38 @@ export async function fetchCollection(collectionName: string) {
   }
 
   const contentResults = await Promise.allSettled(
-    files.map(file => fetchContentFile(`${collectionName}/${file}`))
+    files.map(async file => ({
+      file,
+      data: await fetchContentFile(`${collectionName}/${file}`)
+    }))
   );
 
   const successful = contentResults
-    .filter((result): result is PromiseFulfilledResult<unknown> => result.status === "fulfilled")
+    .filter((result): result is PromiseFulfilledResult<{ file: string; data: any }> => result.status === "fulfilled")
     .map(result => result.value);
 
   if (successful.length > 0) {
-    return successful;
+    const uniqueById = new Map<string, { file: string; data: any }>();
+
+    for (const entry of successful) {
+      const inferredId = entry.file.replace(/\.(json|md|markdown)$/i, "");
+      const recordId = String(entry.data?.id || inferredId);
+      const existing = uniqueById.get(recordId);
+
+      if (!existing) {
+        uniqueById.set(recordId, entry);
+        continue;
+      }
+
+      const currentIsJson = entry.file.endsWith(".json");
+      const existingIsJson = existing.file.endsWith(".json");
+
+      if (currentIsJson && !existingIsJson) {
+        uniqueById.set(recordId, entry);
+      }
+    }
+
+    return Array.from(uniqueById.values()).map(entry => entry.data);
   }
 
   console.warn(`Remote content fetch failed for ${collectionName}. Using local collection fallback.`);
