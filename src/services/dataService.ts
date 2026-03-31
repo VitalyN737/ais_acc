@@ -1,3 +1,5 @@
+import matter from "gray-matter";
+
 const CONTENT_REPO = import.meta.env.VITE_CONTENT_REPO || "VitalyN737/ais_acc";
 const CONTENT_BRANCH = import.meta.env.VITE_CONTENT_BRANCH || "main";
 const CONTENT_ROOT = "src/content";
@@ -38,7 +40,7 @@ const DEFAULT_MANIFEST: Record<string, string[]> = {
 let manifestCache: Record<string, string[]> | null = null;
 const collectionCache = new Map<string, string[]>();
 
-export async function fetchJson(path: string) {
+async function fetchContentFile(path: string) {
   const url = `${GITHUB_RAW_BASE}/${path}${path.includes("?") ? "&" : "?"}t=${Date.now()}`;
   const response = await fetch(url);
 
@@ -46,7 +48,24 @@ export async function fetchJson(path: string) {
     throw new Error(`Failed to fetch ${path} from ${CONTENT_REPO}@${CONTENT_BRANCH}`);
   }
 
+  if (path.endsWith(".json")) {
+    return response.json();
+  }
+
+  if (path.endsWith(".md") || path.endsWith(".markdown")) {
+    const text = await response.text();
+    const parsed = matter(text);
+    return {
+      ...parsed.data,
+      body: parsed.content.trim()
+    };
+  }
+
   return response.json();
+}
+
+export async function fetchJson(path: string) {
+  return fetchContentFile(path);
 }
 
 async function listCollectionFiles(collectionName: string) {
@@ -64,7 +83,10 @@ async function listCollectionFiles(collectionName: string) {
   const entries = await response.json();
   const files = Array.isArray(entries)
     ? entries
-        .filter((entry: { type: string; name: string }) => entry.type === "file" && entry.name.endsWith(".json"))
+        .filter(
+          (entry: { type: string; name: string }) =>
+            entry.type === "file" && (entry.name.endsWith(".json") || entry.name.endsWith(".md") || entry.name.endsWith(".markdown"))
+        )
         .map((entry: { name: string }) => entry.name)
         .sort((a: string, b: string) => a.localeCompare(b))
     : [];
@@ -101,5 +123,5 @@ export async function fetchCollection(collectionName: string) {
     return [];
   }
 
-  return Promise.all(files.map(file => fetchJson(`${collectionName}/${file}`)));
+  return Promise.all(files.map(file => fetchContentFile(`${collectionName}/${file}`)));
 }
