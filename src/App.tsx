@@ -911,11 +911,18 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   // Prevent scrolling when menu is open
   useEffect(() => {
+    const root = document.getElementById('root');
+    if (!root) return;
+
     if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      root.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = 'unset';
+      root.style.overflow = '';
     }
+
+    return () => {
+      root.style.overflow = '';
+    };
   }, [isMenuOpen]);
 
   const navItems = [
@@ -928,7 +935,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   ];
   
   return (
-    <div className="relative min-h-screen overflow-x-hidden gradient-bg selection:bg-primary selection:text-white">
+    <div className="relative gradient-bg selection:bg-primary selection:text-white">
       {/* Background Glows */}
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
