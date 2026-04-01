@@ -928,7 +928,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   ];
   
   return (
-    <div className="relative min-h-screen overflow-x-hidden gradient-bg selection:bg-primary selection:text-white">
+    <div className="relative overflow-x-hidden gradient-bg selection:bg-primary selection:text-white">
       {/* Background Glows */}
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
