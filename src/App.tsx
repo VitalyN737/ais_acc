@@ -958,13 +958,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </nav>
 
           <div className="flex items-center gap-3">
-            <button 
-              onClick={refreshData}
-              className="hidden md:flex items-center justify-center size-10 rounded-lg glass hover:bg-white/10 transition-all text-slate-400 hover:text-primary"
-              title="Refresh Content"
-            >
-              <Rss className="size-4" />
-            </button>
             <div className="hidden lg:flex gap-3">
               <Link 
                 to="/repertoire" 
