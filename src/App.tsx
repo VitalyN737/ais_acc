@@ -113,12 +113,12 @@ const Home = () => {
           <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-white/10 shadow-2xl glass p-3">
             <div className="w-full h-full rounded-2xl bg-cover bg-center" style={{ backgroundImage: `url('${homeData.hero.image}')` }}></div>
           </div>
-          <div className="absolute -bottom-6 -left-6 glass p-6 rounded-2xl border border-white/10 shadow-xl hidden md:block">
+          <!-- div className="absolute -bottom-6 -left-6 glass p-6 rounded-2xl border border-white/10 shadow-xl hidden md:block">
             <div className="flex flex-col">
               <span className="text-primary font-bold text-2xl">{homeData.hero.operaticRolesCount}</span>
               <span className="text-xs uppercase tracking-widest text-slate-400">Operatic Roles</span>
             </div>
-          </div>
+          </div -->
         </div>
       </div>
     </section>
