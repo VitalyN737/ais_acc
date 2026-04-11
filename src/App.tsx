@@ -164,7 +164,7 @@ const Home = () => {
         </Link>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {news.map((item, idx) => (
+        {news.slice(0, 3).map((item, idx) => (
           <Link key={idx} to={`/news/${item.id}`}>
             <motion.div whileHover={{ y: -5 }} className="glass-card rounded-2xl overflow-hidden group cursor-pointer border border-white/5 hover:border-primary/50 transition-all h-full">
               <div className="h-48 bg-cover bg-center overflow-hidden relative">
@@ -1042,9 +1042,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             </div>
             
             <div className="flex flex-wrap justify-center gap-8 text-sm font-medium text-slate-400">
-              {footerData.links.map((link) => (
-                <a key={link} href="#" className="hover:text-primary transition-colors">{link}</a>
-              ))}
+              {footerData.links.map((link: any) => {
+                const isExternal = /^https?:\/\//.test(link.url);
+                return isExternal ? (
+                  <a key={link.url} href={link.url} className="hover:text-primary transition-colors" target="_blank" rel="noreferrer">{link.name}</a>
+                ) : (
+                  <Link key={link.url} to={link.url} className="hover:text-primary transition-colors">{link.name}</Link>
+                );
+              })}
             </div>
 
             <div className="flex gap-4">
