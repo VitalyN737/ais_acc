@@ -164,7 +164,7 @@ const Home = () => {
         </Link>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {news.map((item, idx) => (
+        {news.slice(0, 3).map((item, idx) => (
           <Link key={idx} to={`/news/${item.id}`}>
             <motion.div whileHover={{ y: -5 }} className="glass-card rounded-2xl overflow-hidden group cursor-pointer border border-white/5 hover:border-primary/50 transition-all h-full">
               <div className="h-48 bg-cover bg-center overflow-hidden relative">
