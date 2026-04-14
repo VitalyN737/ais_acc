@@ -2,20 +2,20 @@
   "copyright": "Official Website © 2026",
   "links": [
     {
-      "name": "Privacy Policy",
-      "url": "/privacy-policy"
+      "name": "スケジュール",
+      "url": "/schedule"
     },
     {
       "name": "Terms of Service",
-      "url": "/terms-of-service"
+      "url": "/cd"
     },
     {
-      "name": "Press Kit",
-      "url": "/press-kit"
+      "name": "レパートリー",
+      "url": "/repertoire"
     },
     {
-      "name": "Management",
-      "url": "/management"
+      "name": "コンタクト",
+      "url": "/contact"
     }
   ]
 }
