@@ -1,9 +1,21 @@
 {
   "copyright": "Official Website © 2026",
   "links": [
-    "Privacy Policy",
-    "Terms of Service",
-    "Press Kit",
-    "Management"
+    {
+      "name": "Privacy Policy",
+      "url": "/privacy-policy"
+    },
+    {
+      "name": "Terms of Service",
+      "url": "/terms-of-service"
+    },
+    {
+      "name": "Press Kit",
+      "url": "/press-kit"
+    },
+    {
+      "name": "Management",
+      "url": "/management"
+    }
   ]
 }
