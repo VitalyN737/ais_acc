@@ -1042,7 +1042,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             </div>
             
             <div className="flex flex-wrap justify-center gap-8 text-sm font-medium text-slate-400">
-              {footerData.links.map((link: any) => {
+              {footerData.links.map((link: { name: string; url: string }) => {
                 const isExternal = /^https?:\/\//.test(link.url);
                 return isExternal ? (
                   <a key={link.url} href={link.url} className="hover:text-primary transition-colors" target="_blank" rel="noreferrer">{link.name}</a>

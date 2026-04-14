@@ -171,4 +171,6 @@ collections:
           - label: "Footer Links"
             name: "links"
             widget: "list"
-            field: { label: "Link", name: "link", widget: "string" }
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "URL", name: "url", widget: "string" }
