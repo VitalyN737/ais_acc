@@ -24,7 +24,11 @@ import {
   ExternalLink,
   Play,
   Menu,
-  X
+  X,
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube
 } from "lucide-react";
 import { HashRouter, Routes, Route, Link, useLocation, useParams } from "react-router-dom";
 import React, { useState, useEffect, createContext, useContext } from "react";
@@ -99,7 +103,7 @@ const Home = () => {
         </div>
 
         <div className="flex gap-4 mt-6">
-          {[Award, Share2, Camera, Film].map((Icon, idx) => (
+          {[Facebook, Twitter, Instagram, Youtube].map((Icon, idx) => (
             <a key={idx} href="#" className="size-12 rounded-full glass flex items-center justify-center hover:text-primary hover:bg-white/5 transition-all">
               <Icon className="size-5" />
             </a>
