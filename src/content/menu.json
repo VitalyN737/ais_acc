@@ -1,15 +1,15 @@
 {
   "items": [
     {
-      "name": "Schedule",
+      "name": "スケジュール",
       "link": "/schedule"
     },
     {
-      "name": "News",
+      "name": "ニュース",
       "link": "/news"
     },
     {
-      "name": "Profile",
+      "name": "プロフィール",
       "link": "/profile"
     },
     {
