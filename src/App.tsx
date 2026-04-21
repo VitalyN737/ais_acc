@@ -88,6 +88,13 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => (
 
 const Home = () => {
   const { homeData, performances, news } = useData();
+  const socialLinks = [
+    { name: "Facebook", href: "https://www.facebook.com/vitalyyushmanov/", Icon: Facebook },
+    { name: "Twitter", href: "https://twitter.com/vitaly_jpn", Icon: Twitter },
+    { name: "Instagram", href: "https://www.instagram.com/vitaly_y_japan/", Icon: Instagram },
+    { name: "Youtube", href: "https://www.youtube.com/channel/UCuZ_sPJ9OzC4Z6xdVc9G02Q", Icon: Youtube },
+  ];
+
   return (
     <PageWrapper>
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-10">
@@ -114,11 +121,27 @@ const Home = () => {
           </Link>
         </div>
 
-        <div className="flex gap-4 mt-6">
-          {[Facebook, Twitter, Instagram, Youtube].map((Icon, idx) => (
-            <a key={idx} href="#" className="size-12 rounded-full glass flex items-center justify-center hover:text-primary hover:bg-white/5 transition-all">
-              <Icon className="size-5" />
-            </a>
+        <div className="flex flex-wrap gap-5 mt-6">
+          {socialLinks.map(({ name, href, Icon }) => (
+            <div key={name} className="flex flex-col items-center gap-2 min-w-[74px]">
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={name}
+                className="size-12 rounded-full glass flex items-center justify-center hover:text-primary hover:bg-white/5 transition-all"
+              >
+                <Icon className="size-5" />
+              </a>
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-slate-300 hover:text-primary transition-colors"
+              >
+                {name}
+              </a>
+            </div>
           ))}
         </div>
       </div>
