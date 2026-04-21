@@ -40,6 +40,21 @@ const initialHome = { hero: { welcomeText: "", firstName: "", lastName: "", desc
 const initialProfile = { name: "", bio: [], experience: 0, performances: 0, image: "" };
 const initialContact = { title: "", description: "", management: { name: "", location: "", email: "" } };
 const initialFooter = { copyright: "", links: [] };
+const initialMenu = { items: [] as Array<{ name: string; link: string }> };
+
+const normalizeMenuItems = (menu: any): Array<{ name: string; link: string }> => {
+  const rawItems = Array.isArray(menu) ? menu : menu?.items;
+  if (!Array.isArray(rawItems)) return [];
+
+  return rawItems
+    .map((item: any) => {
+      const link = String(item?.link || item?.path || "").trim();
+      const name = String(item?.name || "").trim();
+      if (!link || !name) return null;
+      return { name, link };
+    })
+    .filter((item: { name: string; link: string } | null): item is { name: string; link: string } => Boolean(item));
+};
 
 const DataContext = createContext<any>(null);
 
@@ -52,6 +67,7 @@ const useData = () => {
       profileData: initialProfile,
       contactData: initialContact,
       footerData: initialFooter,
+      menuData: initialMenu,
       news: [],
       performances: [],
       galleryItems: [],
@@ -900,7 +916,7 @@ const RepertoireDetail = () => {
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { footerData, refreshData } = useData();
+  const { footerData, menuData, refreshData } = useData();
 
   // Close menu when location changes
   useEffect(() => {
@@ -915,14 +931,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     }
   }, [isMenuOpen]);
 
-  const navItems = [
-    { name: "Schedule", path: "/schedule" },
-    { name: "News", path: "/news" },
-    { name: "Profile", path: "/profile" },
-    { name: "Gallery", path: "/gallery" },
-    { name: "Media", path: "/media" },
-    { name: "CD", path: "/cd" }
-  ];
+  const menuItems = normalizeMenuItems(menuData);
+  const actionLinks = new Set(["/repertoire", "/contact"]);
+  const navItems = menuItems.filter((item: { name: string; link: string }) => !actionLinks.has(item.link));
+  const ctaItems = menuItems.filter((item: { name: string; link: string }) => actionLinks.has(item.link));
   
   return (
     <div className="relative min-h-screen gradient-bg selection:bg-primary selection:text-white">
@@ -947,8 +959,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             {navItems.map((item) => (
               <Link 
                 key={item.name} 
-                to={item.path} 
-                className={`text-sm font-medium transition-colors ${location.pathname === item.path ? 'text-primary' : 'hover:text-primary'}`}
+                to={item.link} 
+                className={`text-sm font-medium transition-colors ${location.pathname === item.link ? 'text-primary' : 'hover:text-primary'}`}
               >
                 {item.name}
               </Link>
@@ -957,18 +969,18 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
           <div className="flex items-center gap-3">
             <div className="hidden lg:flex gap-3">
-              <Link 
-                to="/repertoire" 
-                className={`flex items-center justify-center px-5 py-2 rounded-lg border text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-sm ${location.pathname === '/repertoire' ? 'bg-white text-primary border-white' : 'bg-white/10 border-white/30 text-white hover:bg-white/20'}`}
-              >
-                Repertoire
-              </Link>
-              <Link 
-                to="/contact" 
-                className={`flex items-center justify-center px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider shadow-lg transition-all cursor-pointer ${location.pathname === '/contact' ? 'bg-white text-primary' : 'bg-primary text-white shadow-primary/40 hover:scale-105'}`}
-              >
-                Contact
-              </Link>
+              {ctaItems.map((item: { name: string; link: string }) => {
+                const isContact = item.link === '/contact';
+                const baseClass = isContact
+                  ? `flex items-center justify-center px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider shadow-lg transition-all cursor-pointer ${location.pathname === item.link ? 'bg-white text-primary' : 'bg-primary text-white shadow-primary/40 hover:scale-105'}`
+                  : `flex items-center justify-center px-5 py-2 rounded-lg border text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-sm ${location.pathname === item.link ? 'bg-white text-primary border-white' : 'bg-white/10 border-white/30 text-white hover:bg-white/20'}`;
+
+                return (
+                  <Link key={item.link} to={item.link} className={baseClass}>
+                    {item.name}
+                  </Link>
+                );
+              })}
             </div>
             
             {/* Hamburger Button */}
@@ -995,25 +1007,22 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 {navItems.map((item) => (
                   <Link 
                     key={item.name} 
-                    to={item.path} 
-                    className={`text-2xl font-black tracking-tight transition-colors ${location.pathname === item.path ? 'text-primary' : 'text-white hover:text-primary'}`}
+                    to={item.link} 
+                    className={`text-2xl font-black tracking-tight transition-colors ${location.pathname === item.link ? 'text-primary' : 'text-white hover:text-primary'}`}
                   >
                     {item.name}
                   </Link>
                 ))}
-                <div className="h-px bg-white/10 my-4"></div>
-                <Link 
-                  to="/repertoire" 
-                  className={`text-2xl font-black tracking-tight transition-colors ${location.pathname === '/repertoire' ? 'text-primary' : 'text-white hover:text-primary'}`}
-                >
-                  Repertoire
-                </Link>
-                <Link 
-                  to="/contact" 
-                  className={`text-2xl font-black tracking-tight transition-colors ${location.pathname === '/contact' ? 'text-primary' : 'text-white hover:text-primary'}`}
-                >
-                  Contact
-                </Link>
+                {ctaItems.length > 0 && <div className="h-px bg-white/10 my-4"></div>}
+                {ctaItems.map((item: { name: string; link: string }) => (
+                  <Link 
+                    key={item.link}
+                    to={item.link} 
+                    className={`text-2xl font-black tracking-tight transition-colors ${location.pathname === item.link ? 'text-primary' : 'text-white hover:text-primary'}`}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
               </nav>
 
               <div className="mt-auto flex gap-6">
@@ -1076,6 +1085,7 @@ export default function App() {
   const [profileData, setProfileData] = useState(initialProfile);
   const [contactData, setContactData] = useState(initialContact);
   const [footerData, setFooterData] = useState(initialFooter);
+  const [menuData, setMenuData] = useState(initialMenu);
   const [news, setNews] = useState<any[]>([]);
   const [performances, setPerformances] = useState<any[]>([]);
   const [galleryItems, setGalleryItems] = useState<any[]>([]);
@@ -1091,13 +1101,14 @@ export default function App() {
       const timestamp = Date.now();
       console.log(`Fetching data with timestamp: ${timestamp}`);
       const [
-        home, profile, contact, footer,
+        home, profile, contact, footer, menu,
         newsData, perfData, galleryData, mediaData, repData, cdsData
       ] = await Promise.all([
         fetchJson('home.json'),
         fetchJson('profile.json'),
         fetchJson('contact.json'),
         fetchJson('footer.json'),
+        fetchJson('menu.json'),
         fetchCollection('news'),
         fetchCollection('performances'),
         fetchCollection('gallery'),
@@ -1111,6 +1122,7 @@ export default function App() {
       setProfileData(profile);
       setContactData(contact);
       setFooterData(footer);
+      setMenuData(menu);
       setNews(newsData);
       setPerformances(perfData);
       setGalleryItems(galleryData);
@@ -1140,7 +1152,7 @@ export default function App() {
   }
 
   const dataValue = {
-    homeData, profileData, contactData, footerData,
+    homeData, profileData, contactData, footerData, menuData,
     news, performances, galleryItems, mediaItems, repertoireItems, cds,
     refreshData: () => setRefreshKey(prev => prev + 1)
   };

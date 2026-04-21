@@ -1,0 +1,36 @@
+{
+  "items": [
+    {
+      "name": "Schedule",
+      "link": "/schedule"
+    },
+    {
+      "name": "News",
+      "link": "/news"
+    },
+    {
+      "name": "Profile",
+      "link": "/profile"
+    },
+    {
+      "name": "Gallery",
+      "link": "/gallery"
+    },
+    {
+      "name": "Media",
+      "link": "/media"
+    },
+    {
+      "name": "CD",
+      "link": "/cd"
+    },
+    {
+      "name": "Repertoire",
+      "link": "/repertoire"
+    },
+    {
+      "name": "Contact",
+      "link": "/contact"
+    }
+  ]
+}

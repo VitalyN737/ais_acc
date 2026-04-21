@@ -160,6 +160,21 @@ collections:
               - { label: "Location", name: "location", widget: "string" }
               - { label: "Email", name: "email", widget: "string" }
 
+
+  - name: "menu"
+    label: "Menu"
+    files:
+      - file: "src/content/menu.json"
+        label: "Menu Items"
+        name: "menu"
+        fields:
+          - label: "Items"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Link", name: "link", widget: "string" }
+
   - name: "footer"
     label: "Footer"
     files:
