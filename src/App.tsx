@@ -563,7 +563,7 @@ const Contact = () => {
     };
 
     try {
-      await fetch("https://24x365days.com/api/contact", {
+      await fetch("https://weathered-hat-4b91.dmitrii-iushmanov.workers.dev", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
