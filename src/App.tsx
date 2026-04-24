@@ -537,6 +537,44 @@ const Repertoire = () => {
 
 const Contact = () => {
   const { contactData } = useData();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setFormData((current) => ({
+      ...current,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      subject: formData.subject,
+      message: formData.message
+    };
+
+    try {
+      await fetch("https://24x365days.com/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+    } catch (error) {
+      console.error("Failed to send contact form", error);
+    }
+  };
+
   return (
     <PageWrapper>
       <div className="py-10 grid grid-cols-1 lg:grid-cols-2 gap-16">
@@ -573,24 +611,52 @@ const Contact = () => {
       </div>
 
       <div className="glass-card p-10 rounded-[3rem] border border-white/10 shadow-2xl">
-        <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
+        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
               <label className="text-xs uppercase tracking-widest font-bold text-slate-500 ml-1">Name</label>
-              <input type="text" className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition-all" placeholder="Your Name" />
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition-all"
+                placeholder="Your Name"
+              />
             </div>
             <div className="flex flex-col gap-2">
               <label className="text-xs uppercase tracking-widest font-bold text-slate-500 ml-1">Email</label>
-              <input type="email" className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition-all" placeholder="your@email.com" />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition-all"
+                placeholder="your@email.com"
+              />
             </div>
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-xs uppercase tracking-widest font-bold text-slate-500 ml-1">Subject</label>
-            <input type="text" className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition-all" placeholder="Performance Inquiry" />
+            <input
+              type="text"
+              name="subject"
+              value={formData.subject}
+              onChange={handleInputChange}
+              className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition-all"
+              placeholder="Performance Inquiry"
+            />
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-xs uppercase tracking-widest font-bold text-slate-500 ml-1">Message</label>
-            <textarea rows={5} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition-all resize-none" placeholder="Your message here..."></textarea>
+            <textarea
+              rows={5}
+              name="message"
+              value={formData.message}
+              onChange={handleInputChange}
+              className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition-all resize-none"
+              placeholder="Your message here..."
+            ></textarea>
           </div>
           <button className="bg-primary text-white font-bold py-4 rounded-xl shadow-xl shadow-primary/30 hover:-translate-y-1 transition-all">
             Send Message
