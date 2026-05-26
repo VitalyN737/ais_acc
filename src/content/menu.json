@@ -13,11 +13,11 @@
       "link": "/profile"
     },
     {
-      "name": "Gallery",
+      "name": "ギャラリー",
       "link": "/gallery"
     },
     {
-      "name": "Media",
+      "name": "メディア",
       "link": "/media"
     },
     {
@@ -25,11 +25,11 @@
       "link": "/cd"
     },
     {
-      "name": "Repertoire",
+      "name": "レパートリー",
       "link": "/repertoire"
     },
     {
-      "name": "Contact",
+      "name": "コンタクト",
       "link": "/contact"
     }
   ]
