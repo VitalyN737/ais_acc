@@ -1,8 +1,10 @@
 {
-  "id": "mozart-don-giovanni-audio",
+  "id": "Caldara-Come-raggio-di-sol",
   "type": "audio",
-  "title": "Mozart: Don Giovanni - Deh, vieni alla finestra",
-  "duration": "02:15",
-  "audioUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-  "body": "A charming serenade from Mozart's 'Don Giovanni'. Vitaly Yushmanov's baritone brings a perfect blend of elegance and seduction to this iconic aria."
+  "title": "Caldara - Come raggio di sol",
+  "subtitle": "",
+  "image": "/images/uploads/Screenshot 2026-05-27 205238.png",
+  "duration": "02:45",
+  "body": "[「愛の言葉」アルバムより](https://octavia-shop.com/shopdetail/000000000948/)",
+  "audioUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
 }
