@@ -1,15 +1,27 @@
 {
   "id": "italian-arias-cd",
-  "title": "Italian Arias",
-  "year": "2022",
-  "description": "A collection of the most beloved baritone arias from the Italian operatic tradition.",
-  "image": "https://picsum.photos/seed/cd1/800/800",
+  "title": "\"Parole d'amore\"/『愛の言葉』",
+  "year": "2016、Octavia Records",
+  "description": "ヴィタリ（バリトン）\n山田 剛史（ピアノ）",
+  "image": "/images/uploads/Screenshot 2026-05-27 205238.png",
   "featured": false,
-  "body": "A journey through the golden age of Italian opera. Vitaly Yushmanov performs iconic arias from Verdi, Puccini, and Donizetti, showcasing the bel canto tradition at its finest.",
+  "body": "本アルバムでは、得意のイタリアオペラものを始め、トスティコンクールにて大絶賛されたトスティの歌曲を収録。コンクールでも伴奏を共にした、山田剛史とのアンサンブルも磐石です。スケールの大きさを感じさせるヴィタリの音楽。\n\n圧倒的な声量と、人の心へダイレクトに届く歌唱力。絶妙にコントロールされた音楽性。聴いたものを必ず魅了する輝かしい歌声は、すでに各方面にて大絶賛を受けています。",
   "tracks": [
-    "Verdi: La Traviata - Di Provenza il mar",
-    "Puccini: La Bohème - O Mimì, tu più non torni",
-    "Mozart: Don Giovanni - Deh, vieni alla finestra",
-    "Verdi: Don Carlo - Per me giunto"
+    "ジョルダーノ：「祖国の敵」（歌劇「アンドレア・シェニエ」）",
+    "ヴェルディ：「君の微笑み」（歌劇「イル・トロヴァトーレ」）",
+    "ドニゼッティ：「残酷で最悪な苛立ちを」（歌劇「ラメルモールのルチア」）",
+    "ヴェルディ：「汝こそ心を汚す者」（歌劇「仮面舞踏会」）",
+    "チェスティ：「どこに迷い込んできたのか？」 （歌劇「金のりんご」）",
+    "ヴェルディ：「私の最後の日が参りました」「この骨壷に近づいてはならぬ」（歌劇「ドン・カルロ」）",
+    "カルダーラ：「やわらかな陽の光が」",
+    "ベッリーニ：「棄てられて」「美しいニーチェよ、この愛の」「行け、幸運なバラよ」",
+    "ジョルダーノ：「いとしい女よ」",
+    "トスティ：「魅惑」",
+    "トスティ：「かわいい口もと」",
+    "トスティ：「最後の口づけ」",
+    "トスティ：「理想の人」",
+    "トスティ：「さようなら」",
+    "トスティ：「夜明けは光から闇を分かち」",
+    "トスティ：「死ぬには」"
   ]
 }
