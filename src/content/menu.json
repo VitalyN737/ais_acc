@@ -31,6 +31,14 @@
     {
       "name": "コンタクト",
       "link": "/contact"
+    },
+    {
+      "name": "Books",
+      "link": "/books"
+    },
+    {
+      "name": "Lessons",
+      "link": "/lessons"
     }
   ]
 }
