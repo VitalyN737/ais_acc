@@ -37,7 +37,7 @@ import { fetchJson, fetchCollection } from "./services/dataService";
 
 // Initial placeholders to prevent crashes before fetch
 const initialHome = { hero: { welcomeText: "", firstName: "", lastName: "", description: "", image: "", operaticRolesCount: "" } };
-const initialProfile = { name: "", bio: [], image: "" };
+const initialProfile = { name: "", title: "", bio: [], image: "" };
 const initialContact = { title: "", description: "", management: { name: "", location: "", email: "" } };
 const initialFooter = { copyright: "", links: [] };
 const defaultMenuItems = [
@@ -307,7 +307,10 @@ const Profile = () => {
       <div className="flex flex-col gap-8">
         <div>
           <span className="text-primary font-bold tracking-[0.3em] uppercase text-sm mb-2 block">Biography</span>
-          <h2 className="text-5xl font-black tracking-tight mb-6">{profileData.name}</h2>
+          <h2 className="text-5xl font-black tracking-tight mb-3">{profileData.name}</h2>
+          {profileData.title && (
+            <p className="text-2xl text-primary font-semibold mb-6">{profileData.title}</p>
+          )}
           <div className="flex flex-col gap-6 text-lg text-slate-300 leading-relaxed">
             {profileData.bio.map((para, idx) => (
               <p key={idx}>{para}</p>
