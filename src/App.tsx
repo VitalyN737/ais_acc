@@ -37,7 +37,7 @@ import { fetchJson, fetchCollection } from "./services/dataService";
 
 // Initial placeholders to prevent crashes before fetch
 const initialHome = { hero: { welcomeText: "", firstName: "", lastName: "", description: "", image: "", operaticRolesCount: "" } };
-const initialProfile = { name: "", bio: [], experience: 0, performances: 0, image: "" };
+const initialProfile = { name: "", bio: [], image: "" };
 const initialContact = { title: "", description: "", management: { name: "", location: "", email: "" } };
 const initialFooter = { copyright: "", links: [] };
 const defaultMenuItems = [
@@ -312,16 +312,6 @@ const Profile = () => {
             {profileData.bio.map((para, idx) => (
               <p key={idx}>{para}</p>
             ))}
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="glass p-6 rounded-2xl">
-            <span className="text-primary font-bold text-3xl block mb-1">{profileData.experience}+</span>
-            <span className="text-xs uppercase tracking-widest text-slate-500">Years of Experience</span>
-          </div>
-          <div className="glass p-6 rounded-2xl">
-            <span className="text-primary font-bold text-3xl block mb-1">{profileData.performances}+</span>
-            <span className="text-xs uppercase tracking-widest text-slate-500">Performances</span>
           </div>
         </div>
       </div>
