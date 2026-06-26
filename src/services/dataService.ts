@@ -5,6 +5,12 @@ const CONTENT_ROOT = "src/content";
 const GITHUB_RAW_BASE = `https://raw.githubusercontent.com/${CONTENT_REPO}/${CONTENT_BRANCH}/${CONTENT_ROOT}`;
 const GITHUB_API_BASE = `https://api.github.com/repos/${CONTENT_REPO}/contents/${CONTENT_ROOT}`;
 const LOCAL_CONTENT_GLOB = import.meta.glob("../content/**/*.json", { eager: true });
+const FETCH_OPTIONS: RequestInit = {
+  cache: "no-store",
+  headers: {
+    "Cache-Control": "no-cache"
+  }
+};
 
 const DEFAULT_MANIFEST: Record<string, string[]> = {
   news: [
@@ -88,8 +94,19 @@ function readLocalJson(path: string) {
 }
 
 async function fetchContentFile(path: string) {
-  const url = `${GITHUB_RAW_BASE}/${path}${path.includes("?") ? "&" : "?"}t=${Date.now()}`;
-  const response = await fetch(url);
+  const apiUrl = `${GITHUB_API_BASE}/${path}?ref=${CONTENT_BRANCH}&t=${Date.now()}`;
+  const rawUrl = `${GITHUB_RAW_BASE}/${path}${path.includes("?") ? "&" : "?"}t=${Date.now()}`;
+  let response = await fetch(apiUrl, {
+    ...FETCH_OPTIONS,
+    headers: {
+      ...FETCH_OPTIONS.headers,
+      Accept: "application/vnd.github.raw"
+    }
+  });
+
+  if (!response.ok) {
+    response = await fetch(rawUrl, FETCH_OPTIONS);
+  }
 
   if (!response.ok) {
     throw new Error(`Failed to fetch ${path} from ${CONTENT_REPO}@${CONTENT_BRANCH}`);
@@ -122,7 +139,7 @@ async function listCollectionFiles(collectionName: string) {
   }
 
   const listUrl = `${GITHUB_API_BASE}/${collectionName}?ref=${CONTENT_BRANCH}&t=${Date.now()}`;
-  const response = await fetch(listUrl);
+  const response = await fetch(listUrl, FETCH_OPTIONS);
 
   if (!response.ok) {
     throw new Error(`Failed to list ${collectionName} from ${CONTENT_REPO}@${CONTENT_BRANCH}`);
