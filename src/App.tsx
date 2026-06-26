@@ -36,7 +36,17 @@ import Markdown from "react-markdown";
 import { fetchJson, fetchCollection } from "./services/dataService";
 
 // Initial placeholders to prevent crashes before fetch
-const initialHome = { hero: { welcomeText: "", firstName: "", lastName: "", description: "", image: "", operaticRolesCount: "" } };
+const initialHome = {
+  hero: { welcomeText: "", firstName: "", lastName: "", description: "", image: "", operaticRolesCount: "" },
+  labels: {
+    viewSchedule: "View Schedule",
+    watchMedia: "Watch Media",
+    upcomingPerformances: "Upcoming Performances",
+    fullSchedule: "Full Schedule",
+    bookTickets: "Book Tickets",
+    latestNews: "Latest News"
+  }
+};
 const initialProfile = { name: "", title: "", bio: [], image: "" };
 const initialContact = { title: "", description: "", management: { name: "", location: "", email: "" } };
 const initialFooter = { copyright: "", links: [] };
@@ -112,11 +122,11 @@ const Home = () => {
         
         <div className="flex flex-wrap gap-4 mt-4">
           <Link to="/schedule" className="flex items-center gap-2 px-8 py-4 rounded-xl bg-primary text-white font-bold text-lg shadow-xl shadow-primary/40 hover:-translate-y-1 transition-all group">
-            View Schedule
+            {homeData.labels?.viewSchedule || "View Schedule"}
             <Calendar className="size-5 group-hover:scale-110 transition-transform" />
           </Link>
           <Link to="/media" className="flex items-center gap-2 px-8 py-4 rounded-xl glass text-slate-100 font-bold text-lg hover:bg-white/10 transition-all group">
-            Watch Media
+            {homeData.labels?.watchMedia || "Watch Media"}
             <PlayCircle className="size-5 group-hover:scale-110 transition-transform" />
           </Link>
         </div>
@@ -158,9 +168,9 @@ const Home = () => {
 
     <section className="mt-20">
       <div className="flex items-center justify-between mb-8 px-2">
-        <h2 className="text-3xl font-bold tracking-tight">Upcoming Performances</h2>
+        <h2 className="text-3xl font-bold tracking-tight">{homeData.labels?.upcomingPerformances || "Upcoming Performances"}</h2>
         <Link to="/schedule" className="text-primary font-bold text-sm uppercase tracking-widest flex items-center gap-2 group">
-          Full Schedule <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
+          {homeData.labels?.fullSchedule || "Full Schedule"} <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
       <div className="flex flex-col gap-4">
@@ -183,7 +193,7 @@ const Home = () => {
               </div>
               <div className="hidden md:flex gap-4">
                 <button className="px-6 py-2 rounded-xl border border-primary text-primary font-bold hover:bg-primary hover:text-white transition-all text-sm">
-                  Book Tickets
+                  {homeData.labels?.bookTickets || "Book Tickets"}
                 </button>
                 <div className="size-10 rounded-xl glass flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
                   <ArrowRight className="size-5" />
@@ -197,7 +207,7 @@ const Home = () => {
 
     <section className="mt-20">
       <div className="flex items-center justify-between mb-8 px-2">
-        <h2 className="text-3xl font-bold tracking-tight">Latest News</h2>
+        <h2 className="text-3xl font-bold tracking-tight">{homeData.labels?.latestNews || "Latest News"}</h2>
         <Link to="/news" className="text-primary font-bold text-sm uppercase tracking-widest flex items-center gap-2 group">
           View All <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
         </Link>

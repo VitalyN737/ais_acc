@@ -6,5 +6,13 @@
     "description": "Experience the profound resonance and artistry of internationally acclaimed baritone Vitaly Yushmanov. From the grand stages of Tokyo to European opera houses.",
     "image": "/images/uploads/IMG_0029_sm.jpg",
     "operaticRolesCount": "15+"
+  },
+  "labels": {
+    "viewSchedule": "View Schedule",
+    "watchMedia": "Watch Media",
+    "upcomingPerformances": "Upcoming Performances",
+    "fullSchedule": "Full Schedule",
+    "bookTickets": "Book Tickets",
+    "latestNews": "Latest News"
   }
 }

@@ -30,6 +30,16 @@ collections:
               - { label: "Description", name: "description", widget: "text" }
               - { label: "Image", name: "image", widget: "image" }
               - { label: "Operatic Roles Count", name: "operaticRolesCount", widget: "string" }
+          - name: "labels"
+            label: "Home Page Labels"
+            widget: "object"
+            fields:
+              - { label: "View Schedule", name: "viewSchedule", widget: "string" }
+              - { label: "Watch Media", name: "watchMedia", widget: "string" }
+              - { label: "Upcoming Performances", name: "upcomingPerformances", widget: "string" }
+              - { label: "Full Schedule", name: "fullSchedule", widget: "string" }
+              - { label: "Book Tickets", name: "bookTickets", widget: "string" }
+              - { label: "Latest News", name: "latestNews", widget: "string" }
 
   - name: "profile"
     label: "Profile"
