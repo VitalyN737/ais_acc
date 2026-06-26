@@ -39,6 +39,10 @@ const DEFAULT_MANIFEST: Record<string, string[]> = {
     "rachmaninoff-songs-cd.json",
     "slavic-soul-cd.json",
     "verdi-highlights-cd.json"
+  ],
+  books: [
+    "vitaly-life-book.json",
+    "russian-cooking-book.json"
   ]
 };
 

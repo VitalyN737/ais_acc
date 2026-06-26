@@ -151,6 +151,27 @@ collections:
         widget: "list"
         field: { label: "Track Title", name: "track", widget: "string" }
 
+  - name: "books"
+    label: "Books"
+    folder: "src/content/books"
+    create: true
+    slug: "{{id}}"
+    format: "json"
+    extension: "json"
+    fields:
+      - { label: "ID", name: "id", widget: "string" }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Year", name: "year", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Image", name: "image", widget: "image" }
+      - { label: "Featured", name: "featured", widget: "boolean" }
+      - { label: "Body", name: "body", widget: "markdown" }
+      - label: "Contents"
+        name: "contents"
+        widget: "list"
+        required: false
+        field: { label: "Content Item", name: "item", widget: "string" }
+
   - name: "contact"
     label: "Contact"
     files:

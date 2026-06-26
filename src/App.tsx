@@ -18,6 +18,7 @@ import {
   Rss,
   Theater,
   Disc,
+  BookOpen,
   User,
   Image as ImageIcon,
   Video,
@@ -57,6 +58,7 @@ const defaultMenuItems = [
   { name: "Gallery", link: "/gallery" },
   { name: "Media", link: "/media" },
   { name: "CD", link: "/cd" },
+  { name: "Books", link: "/books" },
   { name: "Repertoire", link: "/repertoire" },
   { name: "Contact", link: "/contact" }
 ];
@@ -79,7 +81,8 @@ const useData = () => {
       galleryItems: [],
       mediaItems: [],
       repertoireItems: [],
-      cds: []
+      cds: [],
+      books: []
     };
   }
   return context;
@@ -490,6 +493,63 @@ const CD = () => {
   );
 };
 
+const Books = () => {
+  const { books } = useData();
+  return (
+    <PageWrapper>
+      <div className="py-10">
+      <h2 className="text-4xl font-black mb-10 tracking-tight">Books</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        {books.filter(book => book.featured).map(book => (
+          <Link key={book.id} to={`/books/${book.id}`} className="block">
+            <div className="glass-card p-10 rounded-[3rem] border border-white/10 flex flex-col md:flex-row gap-10 items-center hover:bg-white/5 transition-all group">
+              <div className="w-64 aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative">
+                <img
+                  src={book.image}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  alt={book.title}
+                />
+                <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <BookOpen className="text-white size-12" />
+                </div>
+              </div>
+              <div className="flex flex-col gap-4 flex-1 text-center md:text-left">
+                <span className="text-primary font-bold uppercase tracking-widest text-xs">Featured Book</span>
+                <h3 className="text-3xl font-black group-hover:text-primary transition-colors">{book.title}</h3>
+                <p className="text-slate-400">{book.description}</p>
+                <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-4">
+                  <div className="px-6 py-2 rounded-lg bg-primary text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                    Buy Book <ExternalLink className="size-3" />
+                  </div>
+                  <div className="px-6 py-2 rounded-lg glass text-xs font-bold uppercase tracking-widest">
+                    Details
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Link>
+        ))}
+        <div className="grid grid-cols-1 gap-6">
+          {books.filter(book => !book.featured).map((book) => (
+            <Link key={book.id} to={`/books/${book.id}`}>
+              <div className="glass p-6 rounded-2xl flex items-center gap-6 border border-white/5 hover:bg-white/5 transition-all group">
+                <div className="size-20 rounded-xl bg-slate-800 flex items-center justify-center overflow-hidden">
+                  <img src={book.image} className="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity" alt={book.title} />
+                </div>
+                <div className="flex flex-col">
+                  <h4 className="text-xl font-bold group-hover:text-primary transition-colors">{book.title}</h4>
+                  <span className="text-sm text-slate-500">{book.year}</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  </PageWrapper>
+  );
+};
+
 const Repertoire = () => {
   const { repertoireItems } = useData();
   return (
@@ -856,6 +916,75 @@ const CDDetail = () => {
   );
 };
 
+const BookDetail = () => {
+  const { id } = useParams();
+  const { books } = useData();
+  const book = books.find((b: any) => b.id === id);
+
+  if (!book) return <div className="py-20 text-center">Book not found</div>;
+
+  return (
+    <PageWrapper>
+      <div className="py-10 max-w-4xl mx-auto">
+        <Link to="/books" className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
+          <ArrowRight className="size-4 rotate-180" /> Back to Books
+        </Link>
+        <div className="glass-card rounded-[3rem] overflow-hidden border border-white/10 p-10 md:p-16">
+          <div className="flex flex-col md:flex-row gap-12 items-center md:items-start mb-16">
+            <div className="w-72 aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl relative group">
+              <img src={book.image} className="w-full h-full object-cover" alt={book.title} />
+              <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                <BookOpen className="text-white/50 size-20" />
+              </div>
+            </div>
+            <div className="flex-1 text-center md:text-left">
+              <span className="text-primary font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{book.year}</span>
+              <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-tight">{book.title}</h1>
+              <p className="text-xl text-slate-400 mb-8 leading-relaxed">{book.description}</p>
+              <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                <button className="px-10 py-4 bg-primary text-white font-bold rounded-xl shadow-xl shadow-primary/30 hover:-translate-y-1 transition-all flex items-center gap-2">
+                  Buy Book <ExternalLink className="size-4" />
+                </button>
+                <button className="px-10 py-4 glass text-white font-bold rounded-xl hover:bg-white/10 transition-all">
+                  More Details
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-12">
+            <section>
+              <h3 className="text-3xl font-bold border-b border-white/5 pb-6 mb-6">About the Book</h3>
+              <div className="text-slate-300 leading-relaxed markdown-body">
+                <Markdown>{book.body}</Markdown>
+              </div>
+            </section>
+
+            {book.contents && book.contents.length > 0 && (
+              <section>
+                <h3 className="text-3xl font-bold border-b border-white/5 pb-6 mb-8">Contents</h3>
+                <div className="space-y-4">
+                  {book.contents.map((item: string, idx: number) => (
+                    <div key={idx} className="flex items-center justify-between p-6 rounded-2xl hover:bg-white/5 transition-all group border border-transparent hover:border-white/5">
+                      <div className="flex items-center gap-6">
+                        <span className="text-slate-600 font-mono w-6 text-lg">{idx + 1}</span>
+                        <span className="font-bold text-xl group-hover:text-primary transition-colors">{item}</span>
+                      </div>
+                      <div className="size-10 rounded-full glass flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-all">
+                        <BookOpen className="size-4" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+          </div>
+        </div>
+      </div>
+    </PageWrapper>
+  );
+};
+
 const GalleryDetail = () => {
   const { id } = useParams();
   const { galleryItems } = useData();
@@ -1182,6 +1311,7 @@ export default function App() {
   const [mediaItems, setMediaItems] = useState<any[]>([]);
   const [repertoireItems, setRepertoireItems] = useState<any[]>([]);
   const [cds, setCds] = useState<any[]>([]);
+  const [books, setBooks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -1192,7 +1322,7 @@ export default function App() {
       console.log(`Fetching data with timestamp: ${timestamp}`);
       const [
         home, profile, contact, footer, menu,
-        newsData, perfData, galleryData, mediaData, repData, cdsData
+        newsData, perfData, galleryData, mediaData, repData, cdsData, booksData
       ] = await Promise.all([
         fetchJson('home.json'),
         fetchJson('profile.json'),
@@ -1204,7 +1334,8 @@ export default function App() {
         fetchCollection('gallery'),
         fetchCollection('media'),
         fetchCollection('repertoire'),
-        fetchCollection('cds')
+        fetchCollection('cds'),
+        fetchCollection('books')
       ]);
 
       console.log("Data fetched successfully:", { home, profile });
@@ -1219,6 +1350,7 @@ export default function App() {
       setMediaItems(mediaData);
       setRepertoireItems(repData);
       setCds(cdsData);
+      setBooks(booksData);
     } catch (error) {
       console.error("Error loading live data:", error);
     } finally {
@@ -1243,7 +1375,7 @@ export default function App() {
 
   const dataValue = {
     homeData, profileData, contactData, footerData, menuData,
-    news, performances, galleryItems, mediaItems, repertoireItems, cds,
+    news, performances, galleryItems, mediaItems, repertoireItems, cds, books,
     refreshData: () => setRefreshKey(prev => prev + 1)
   };
 
@@ -1264,6 +1396,8 @@ export default function App() {
             <Route path="/media/:id" element={<MediaDetail />} />
             <Route path="/cd" element={<CD />} />
             <Route path="/cd/:id" element={<CDDetail />} />
+            <Route path="/books" element={<Books />} />
+            <Route path="/books/:id" element={<BookDetail />} />
             <Route path="/repertoire" element={<Repertoire />} />
             <Route path="/repertoire/:id" element={<RepertoireDetail />} />
             <Route path="/contact" element={<Contact />} />
