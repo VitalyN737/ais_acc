@@ -114,9 +114,9 @@ const Home = () => {
       <div className="lg:col-span-7 flex flex-col gap-6 order-2 lg:order-1">
         <div className="flex flex-col gap-2">
           <span className="text-slate-400 font-bold tracking-[0.3em] uppercase text-sm">{homeData.hero.welcomeText}</span>
-          <h1 className="text-6xl md:text-8xl font-black leading-none tracking-tighter">
+          <h1 className="hero-name-color text-6xl md:text-8xl font-black leading-none tracking-tighter">
             {homeData.hero.firstName} <br/> 
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">{homeData.hero.lastName}</span>
+            <span className="hero-name-gradient">{homeData.hero.lastName}</span>
           </h1>
         </div>
         <p className="text-lg text-slate-400 max-w-xl leading-relaxed">
