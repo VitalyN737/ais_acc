@@ -23,15 +23,15 @@
   }
 
   .primary-text-color {
-    color: #000;
+    color: #FFF;
   }
 
   .primary-text-color-hover:hover {
-    color: #000;
+    color: #FFF;
   }
 
   .group:hover .group-hover\:primary-text-color {
-    color: #000;
+    color: #FFF;
   }
 
   .glass {
