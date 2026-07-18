@@ -150,7 +150,7 @@ const Home = () => {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-slate-300 hover:text-primary transition-colors"
+                className="text-xs text-slate-300 primary-text-color-hover transition-colors"
               >
                 {name}
               </a>
@@ -172,7 +172,7 @@ const Home = () => {
     <section className="mt-20">
       <div className="flex items-center justify-between mb-8 px-2">
         <h2 className="text-3xl font-bold tracking-tight">{homeData.labels?.upcomingPerformances || "Upcoming Performances"}</h2>
-        <Link to="/schedule" className="text-primary font-bold text-sm uppercase tracking-widest flex items-center gap-2 group">
+        <Link to="/schedule" className="primary-text-color font-bold text-sm uppercase tracking-widest flex items-center gap-2 group">
           {homeData.labels?.fullSchedule || "Full Schedule"} <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
@@ -188,7 +188,7 @@ const Home = () => {
                 <span className="text-2xl font-black">{perf.day}</span>
               </div>
               <div className="flex-1">
-                <h4 className="text-lg font-bold group-hover:text-primary transition-colors">{perf.title}</h4>
+                <h4 className="text-lg font-bold group-hover:primary-text-color transition-colors">{perf.title}</h4>
                 <p className="text-slate-400 text-sm flex items-center gap-2">
                   <MapPin className="size-3 text-primary" />
                   {perf.location}
@@ -211,7 +211,7 @@ const Home = () => {
     <section className="mt-20">
       <div className="flex items-center justify-between mb-8 px-2">
         <h2 className="text-3xl font-bold tracking-tight">{homeData.labels?.latestNews || "Latest News"}</h2>
-        <Link to="/news" className="text-primary font-bold text-sm uppercase tracking-widest flex items-center gap-2 group">
+          <Link to="/news" className="primary-text-color font-bold text-sm uppercase tracking-widest flex items-center gap-2 group">
           View All <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
@@ -224,8 +224,8 @@ const Home = () => {
                 <div className="absolute inset-0 bg-[#0A141F]/40 group-hover:bg-[#0A141F]/20 transition-all"></div>
               </div>
               <div className="p-6">
-                <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-2 block">{item.category}</span>
-                <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{item.title}</h3>
+              <span className="text-[10px] font-bold primary-text-color uppercase tracking-[0.2em] mb-2 block">{item.category}</span>
+              <h3 className="text-xl font-bold mb-2 group-hover:primary-text-color transition-colors">{item.title}</h3>
                 <p className="text-slate-400 text-sm line-clamp-2">{item.description}</p>
               </div>
             </motion.div>
@@ -253,16 +253,16 @@ const Schedule = () => {
                   <span className="text-3xl font-black">{perf.day}</span>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <h4 className="text-2xl font-bold group-hover:text-primary transition-colors">{perf.title}</h4>
+                  <h4 className="text-2xl font-bold group-hover:primary-text-color transition-colors">{perf.title}</h4>
                   <p className="text-slate-400 flex items-center gap-2">
                     <MapPin className="size-4 text-primary" />
                     {perf.location}
                   </p>
-                  <span className="text-xs text-primary font-bold uppercase tracking-widest mt-2">Opera in 3 Acts</span>
+                  <span className="text-xs primary-text-color font-bold uppercase tracking-widest mt-2">Opera in 3 Acts</span>
                 </div>
               </div>
               <div className="mt-6 md:mt-0 flex gap-4">
-                <button className="px-8 py-3 rounded-xl border border-primary text-primary font-bold hover:bg-primary hover:text-white transition-all">
+                <button className="px-8 py-3 rounded-xl border border-primary primary-text-color font-bold hover:bg-primary hover:text-white transition-all">
                   Book Tickets
                 </button>
                 <div className="px-4 py-3 rounded-xl glass hover:bg-white/10 transition-all">
@@ -294,12 +294,12 @@ const News = () => {
               </div>
               <div className="p-8">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-bold text-primary uppercase tracking-[0.2em]">{item.category}</span>
+                  <span className="text-xs font-bold primary-text-color uppercase tracking-[0.2em]">{item.category}</span>
                   <span className="text-xs text-slate-500">Oct 24, 2024</span>
                 </div>
-                <h3 className="text-2xl font-bold mb-4 leading-tight group-hover:text-primary transition-colors">{item.title}</h3>
+                <h3 className="text-2xl font-bold mb-4 leading-tight group-hover:primary-text-color transition-colors">{item.title}</h3>
                 <p className="text-slate-400 leading-relaxed mb-6">{item.description}</p>
-                <div className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-widest group/btn">
+                <div className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest group/btn">
                   Read Full Story <ArrowRight className="size-4 group-hover/btn:translate-x-1 transition-transform" />
                 </div>
               </div>
@@ -319,10 +319,10 @@ const Profile = () => {
       <div className="py-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
       <div className="flex flex-col gap-8">
         <div>
-          <span className="text-primary font-bold tracking-[0.3em] uppercase text-sm mb-2 block">Biography</span>
+          <span className="primary-text-color font-bold tracking-[0.3em] uppercase text-sm mb-2 block">Biography</span>
           <h2 className="text-5xl font-black tracking-tight mb-3">{profileData.name}</h2>
           {profileData.title && (
-            <p className="text-2xl text-primary font-semibold mb-6">{profileData.title}</p>
+            <p className="text-2xl primary-text-color font-semibold mb-6">{profileData.title}</p>
           )}
           <div className="flex flex-col gap-6 text-lg text-slate-300 leading-relaxed">
             {profileData.bio.map((para, idx) => (
@@ -395,7 +395,7 @@ const Media = () => {
                   </div>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent">
-                  <h4 className="text-xl font-bold group-hover:text-primary transition-colors">{video.title}</h4>
+                <h4 className="text-xl font-bold group-hover:primary-text-color transition-colors">{video.title}</h4>
                   <p className="text-sm text-slate-300">{video.subtitle}</p>
                 </div>
               </div>
@@ -417,7 +417,7 @@ const Media = () => {
                       <PlayCircle className="size-6 text-primary group-hover:text-white" />
                     </div>
                     <div className="flex flex-col">
-                      <span className="font-bold text-lg group-hover:text-primary transition-colors">{track.title}</span>
+                      <span className="font-bold text-lg group-hover:primary-text-color transition-colors">{track.title}</span>
                       <span className="text-xs text-slate-500 uppercase tracking-widest">{track.subtitle || "Audio Recording"}</span>
                     </div>
                   </div>
@@ -457,8 +457,8 @@ const CD = () => {
                 </div>
               </div>
               <div className="flex flex-col gap-4 flex-1 text-center md:text-left">
-                <span className="text-primary font-bold uppercase tracking-widest text-xs">Latest Release</span>
-                <h3 className="text-3xl font-black group-hover:text-primary transition-colors">{cd.title}</h3>
+                <span className="primary-text-color font-bold uppercase tracking-widest text-xs">Latest Release</span>
+                <h3 className="text-3xl font-black group-hover:primary-text-color transition-colors">{cd.title}</h3>
                 <p className="text-slate-400">{cd.description}</p>
                 <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-4">
                   <div className="px-6 py-2 rounded-lg bg-primary text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2">
@@ -480,7 +480,7 @@ const CD = () => {
                   <img src={album.image} className="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity" alt={album.title} />
                 </div>
                 <div className="flex flex-col">
-                  <h4 className="text-xl font-bold group-hover:text-primary transition-colors">{album.title}</h4>
+                  <h4 className="text-xl font-bold group-hover:primary-text-color transition-colors">{album.title}</h4>
                   <span className="text-sm text-slate-500">{album.year}</span>
                 </div>
               </div>
@@ -514,8 +514,8 @@ const Books = () => {
                 </div>
               </div>
               <div className="flex flex-col gap-4 flex-1 text-center md:text-left">
-                <span className="text-primary font-bold uppercase tracking-widest text-xs">Featured Book</span>
-                <h3 className="text-3xl font-black group-hover:text-primary transition-colors">{book.title}</h3>
+                <span className="primary-text-color font-bold uppercase tracking-widest text-xs">Featured Book</span>
+                <h3 className="text-3xl font-black group-hover:primary-text-color transition-colors">{book.title}</h3>
                 <p className="text-slate-400">{book.description}</p>
                 <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-4">
                   <div className="px-6 py-2 rounded-lg bg-primary text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2">
@@ -537,7 +537,7 @@ const Books = () => {
                   <img src={book.image} className="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity" alt={book.title} />
                 </div>
                 <div className="flex flex-col">
-                  <h4 className="text-xl font-bold group-hover:text-primary transition-colors">{book.title}</h4>
+                  <h4 className="text-xl font-bold group-hover:primary-text-color transition-colors">{book.title}</h4>
                   <span className="text-sm text-slate-500">{book.year}</span>
                 </div>
               </div>
@@ -558,7 +558,7 @@ const Repertoire = () => {
       <h2 className="text-4xl font-black mb-10 tracking-tight">Repertoire</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div className="flex flex-col gap-8">
-          <h3 className="text-2xl font-bold text-primary flex items-center gap-3">
+          <h3 className="text-2xl font-bold primary-text-color flex items-center gap-3">
             <Theater className="size-6" /> Operatic Roles
           </h3>
           <div className="flex flex-col gap-4">
@@ -567,16 +567,16 @@ const Repertoire = () => {
                 <div className="glass p-5 rounded-2xl flex justify-between items-center border border-white/5 hover:bg-white/5 transition-all group">
                   <div>
                     <span className="text-xs text-slate-500 uppercase tracking-widest">{item.composer}</span>
-                    <h4 className="text-xl font-bold group-hover:text-primary transition-colors">{item.role}</h4>
+                    <h4 className="text-xl font-bold group-hover:primary-text-color transition-colors">{item.role}</h4>
                   </div>
-                  <span className="text-sm italic text-primary">{item.opera}</span>
+                  <span className="text-sm italic primary-text-color">{item.opera}</span>
                 </div>
               </Link>
             ))}
           </div>
         </div>
         <div className="flex flex-col gap-8">
-          <h3 className="text-2xl font-bold text-primary flex items-center gap-3">
+          <h3 className="text-2xl font-bold primary-text-color flex items-center gap-3">
             <Music className="size-6" /> Concert & Oratorio
           </h3>
           <div className="flex flex-col gap-4">
@@ -585,7 +585,7 @@ const Repertoire = () => {
                 <div className="glass p-5 rounded-2xl flex justify-between items-center border border-white/5 hover:bg-white/5 transition-all group">
                   <div>
                     <span className="text-xs text-slate-500 uppercase tracking-widest">{item.composer}</span>
-                    <h4 className="text-xl font-bold group-hover:text-primary transition-colors">{item.work}</h4>
+                    <h4 className="text-xl font-bold group-hover:primary-text-color transition-colors">{item.work}</h4>
                   </div>
                 </div>
               </Link>
@@ -643,7 +643,7 @@ const Contact = () => {
       <div className="py-10 grid grid-cols-1 lg:grid-cols-2 gap-16">
       <div className="flex flex-col gap-8">
         <div>
-          <span className="text-primary font-bold tracking-[0.3em] uppercase text-sm mb-2 block">Get in Touch</span>
+          <span className="primary-text-color font-bold tracking-[0.3em] uppercase text-sm mb-2 block">Get in Touch</span>
           <h2 className="text-5xl font-black tracking-tight mb-6">{contactData.title}</h2>
           <p className="text-lg text-slate-400 leading-relaxed">
             {contactData.description}
@@ -658,7 +658,7 @@ const Contact = () => {
             <div className="flex flex-col gap-2 text-slate-300">
               <p className="font-bold text-white">{contactData.management.name}</p>
               <p>{contactData.management.location}</p>
-              <a href={`mailto:${contactData.management.email}`} className="text-primary hover:underline">{contactData.management.email}</a>
+              <a href={`mailto:${contactData.management.email}`} className="primary-text-color hover:underline">{contactData.management.email}</a>
             </div>
           </div>
 
@@ -741,13 +741,13 @@ const NewsDetail = () => {
   return (
     <PageWrapper>
       <div className="py-10 max-w-4xl mx-auto">
-        <Link to="/news" className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
+        <Link to="/news" className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
           <ArrowRight className="size-4 rotate-180" /> Back to News
         </Link>
         <div className="glass-card rounded-[3rem] overflow-hidden border border-white/10">
           <div className="h-[400px] bg-cover bg-center" style={{ backgroundImage: `url('${item.image}')` }}></div>
           <div className="p-10 md:p-16">
-            <span className="text-primary font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{item.category}</span>
+            <span className="primary-text-color font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{item.category}</span>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-8 leading-tight">{item.title}</h1>
             <div className="flex items-center gap-4 mb-10 pb-10 border-b border-white/5">
               <div className="size-12 rounded-full bg-primary/20 flex items-center justify-center">
@@ -781,7 +781,7 @@ const PerformanceDetail = () => {
   return (
     <PageWrapper>
       <div className="py-10 max-w-4xl mx-auto">
-        <Link to="/schedule" className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
+        <Link to="/schedule" className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
           <ArrowRight className="size-4 rotate-180" /> Back to Schedule
         </Link>
         <div className="glass-card rounded-[3rem] overflow-hidden border border-white/10 p-10 md:p-16">
@@ -857,7 +857,7 @@ const CDDetail = () => {
   return (
     <PageWrapper>
       <div className="py-10 max-w-4xl mx-auto">
-        <Link to="/cd" className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
+        <Link to="/cd" className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
           <ArrowRight className="size-4 rotate-180" /> Back to Discography
         </Link>
         <div className="glass-card rounded-[3rem] overflow-hidden border border-white/10 p-10 md:p-16">
@@ -869,7 +869,7 @@ const CDDetail = () => {
               </div>
             </div>
             <div className="flex-1 text-center md:text-left">
-              <span className="text-primary font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{cd.year} Release</span>
+              <span className="primary-text-color font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{cd.year} Release</span>
               <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-tight">{cd.title}</h1>
               <p className="text-xl text-slate-400 mb-8 leading-relaxed">{cd.description}</p>
               <div className="flex flex-wrap justify-center md:justify-start gap-4">
@@ -899,7 +899,7 @@ const CDDetail = () => {
                     <div key={idx} className="flex items-center justify-between p-6 rounded-2xl hover:bg-white/5 transition-all group border border-transparent hover:border-white/5">
                       <div className="flex items-center gap-6">
                         <span className="text-slate-600 font-mono w-6 text-lg">{idx + 1}</span>
-                        <span className="font-bold text-xl group-hover:text-primary transition-colors">{track}</span>
+                        <span className="font-bold text-xl group-hover:primary-text-color transition-colors">{track}</span>
                       </div>
                       <div className="size-10 rounded-full glass flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-all">
                         <Play className="size-4 fill-current" />
@@ -926,7 +926,7 @@ const BookDetail = () => {
   return (
     <PageWrapper>
       <div className="py-10 max-w-4xl mx-auto">
-        <Link to="/books" className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
+        <Link to="/books" className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
           <ArrowRight className="size-4 rotate-180" /> Back to Books
         </Link>
         <div className="glass-card rounded-[3rem] overflow-hidden border border-white/10 p-10 md:p-16">
@@ -938,7 +938,7 @@ const BookDetail = () => {
               </div>
             </div>
             <div className="flex-1 text-center md:text-left">
-              <span className="text-primary font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{book.year}</span>
+              <span className="primary-text-color font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{book.year}</span>
               <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-tight">{book.title}</h1>
               <p className="text-xl text-slate-400 mb-8 leading-relaxed">{book.description}</p>
               <div className="flex flex-wrap justify-center md:justify-start gap-4">
@@ -968,7 +968,7 @@ const BookDetail = () => {
                     <div key={idx} className="flex items-center justify-between p-6 rounded-2xl hover:bg-white/5 transition-all group border border-transparent hover:border-white/5">
                       <div className="flex items-center gap-6">
                         <span className="text-slate-600 font-mono w-6 text-lg">{idx + 1}</span>
-                        <span className="font-bold text-xl group-hover:text-primary transition-colors">{item}</span>
+                        <span className="font-bold text-xl group-hover:primary-text-color transition-colors">{item}</span>
                       </div>
                       <div className="size-10 rounded-full glass flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-all">
                         <BookOpen className="size-4" />
@@ -995,7 +995,7 @@ const GalleryDetail = () => {
   return (
     <PageWrapper>
       <div className="py-10 max-w-5xl mx-auto">
-        <Link to="/gallery" className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
+        <Link to="/gallery" className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
           <ArrowRight className="size-4 rotate-180" /> Back to Gallery
         </Link>
         <div className="glass-card rounded-[3rem] overflow-hidden border border-white/10">
@@ -1020,7 +1020,7 @@ const MediaDetail = () => {
   return (
     <PageWrapper>
       <div className="py-10 max-w-5xl mx-auto">
-        <Link to="/media" className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
+        <Link to="/media" className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
           <ArrowRight className="size-4 rotate-180" /> Back to Media
         </Link>
         <div className="glass-card rounded-[3rem] overflow-hidden border border-white/10">
@@ -1048,7 +1048,7 @@ const MediaDetail = () => {
             </div>
           )}
           <div className="p-10 md:p-16">
-            <span className="text-primary font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{item.type}</span>
+            <span className="primary-text-color font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{item.type}</span>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-4">{item.title}</h1>
             {item.subtitle && <p className="text-xl text-slate-400 mb-8">{item.subtitle}</p>}
             {item.duration && <p className="text-slate-500 font-mono mb-8">Duration: {item.duration}</p>}
@@ -1095,11 +1095,11 @@ const RepertoireDetail = () => {
   return (
     <PageWrapper>
       <div className="py-10 max-w-4xl mx-auto">
-        <Link to="/repertoire" className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
+        <Link to="/repertoire" className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
           <ArrowRight className="size-4 rotate-180" /> Back to Repertoire
         </Link>
         <div className="glass-card rounded-[3rem] p-10 md:p-16 border border-white/10">
-          <span className="text-primary font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{item.composer}</span>
+          <span className="primary-text-color font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{item.composer}</span>
           <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-tight">
             {item.type === "opera" ? item.role : item.work}
           </h1>
@@ -1170,7 +1170,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             </div>
             <div className="flex flex-col">
               <h2 className="text-lg font-black leading-none tracking-tight uppercase">VITALY YUSHMANOV</h2>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-primary/80 font-bold">Baritone</span>
+              <span className="text-[10px] uppercase tracking-[0.2em] primary-text-color opacity-80 font-bold">Baritone</span>
             </div>
           </Link>
           
@@ -1179,7 +1179,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <Link 
                 key={item.name} 
                 to={item.link} 
-                className={`text-sm font-medium transition-colors ${location.pathname === item.link ? 'text-primary' : 'hover:text-primary'}`}
+                className={`text-sm font-medium transition-colors ${location.pathname === item.link ? 'primary-text-color' : 'primary-text-color-hover'}`}
               >
                 {item.name}
               </Link>
@@ -1191,8 +1191,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               {ctaItems.map((item: { name: string; link: string }) => {
                 const isContact = item.link === '/contact';
                 const baseClass = isContact
-                  ? `flex items-center justify-center px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider shadow-lg transition-all cursor-pointer ${location.pathname === item.link ? 'bg-white text-primary' : 'bg-primary text-white shadow-primary/40 hover:scale-105'}`
-                  : `flex items-center justify-center px-5 py-2 rounded-lg border text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-sm ${location.pathname === item.link ? 'bg-white text-primary border-white' : 'bg-white/10 border-white/30 text-white hover:bg-white/20'}`;
+                  ? `flex items-center justify-center px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider shadow-lg transition-all cursor-pointer ${location.pathname === item.link ? 'bg-white primary-text-color' : 'bg-primary text-white shadow-primary/40 hover:scale-105'}`
+                  : `flex items-center justify-center px-5 py-2 rounded-lg border text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-sm ${location.pathname === item.link ? 'bg-white primary-text-color border-white' : 'bg-white/10 border-white/30 text-white hover:bg-white/20'}`;
 
                 return (
                   <Link key={item.link} to={item.link} className={baseClass}>
@@ -1227,7 +1227,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   <Link 
                     key={item.name} 
                     to={item.link} 
-                    className={`text-2xl font-black tracking-tight transition-colors ${location.pathname === item.link ? 'text-primary' : 'text-white hover:text-primary'}`}
+                    className={`text-2xl font-black tracking-tight transition-colors ${location.pathname === item.link ? 'primary-text-color' : 'text-white primary-text-color-hover'}`}
                   >
                     {item.name}
                   </Link>
@@ -1237,7 +1237,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   <Link 
                     key={item.link}
                     to={item.link} 
-                    className={`text-2xl font-black tracking-tight transition-colors ${location.pathname === item.link ? 'text-primary' : 'text-white hover:text-primary'}`}
+                    className={`text-2xl font-black tracking-tight transition-colors ${location.pathname === item.link ? 'primary-text-color' : 'text-white primary-text-color-hover'}`}
                   >
                     {item.name}
                   </Link>
@@ -1277,9 +1277,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               {footerData.links.map((link: { name: string; url: string }) => {
                 const isExternal = /^https?:\/\//.test(link.url);
                 return isExternal ? (
-                  <a key={link.url} href={link.url} className="hover:text-primary transition-colors" target="_blank" rel="noreferrer">{link.name}</a>
+                  <a key={link.url} href={link.url} className="primary-text-color-hover transition-colors" target="_blank" rel="noreferrer">{link.name}</a>
                 ) : (
-                  <Link key={link.url} to={link.url} className="hover:text-primary transition-colors">{link.name}</Link>
+                  <Link key={link.url} to={link.url} className="primary-text-color-hover transition-colors">{link.name}</Link>
                 );
               })}
             </div>
