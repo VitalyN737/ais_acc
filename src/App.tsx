@@ -1001,7 +1001,7 @@ const GalleryDetail = () => {
         <div className="glass-card rounded-[3rem] overflow-hidden border border-white/10">
           <div className="aspect-square md:aspect-video bg-cover bg-center" style={{ backgroundImage: `url('${item.image}')` }}></div>
           <div className="p-10 md:p-16">
-            <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-6">{item.title}</h1>
+            <h1 className="text-4xl md:text-3xl font-black tracking-tight mb-6">{item.title}</h1>
             <p className="text-xl text-slate-400 leading-relaxed">{item.description}</p>
           </div>
         </div>
