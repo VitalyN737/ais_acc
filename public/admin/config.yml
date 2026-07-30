@@ -50,10 +50,22 @@ collections:
         fields:
           - { label: "Name", name: "name", widget: "string" }
           - { label: "Title", name: "title", widget: "string" }
-          - label: "Bio Paragraphs"
+          - label: "Biography"
             name: "bio"
-            widget: "list"
-            field: { label: "Bio Paragraph", name: "paragraph", widget: "text" }
+            widget: "markdown"
+            buttons:
+              - bold
+              - italic
+              - code
+              - link
+              - heading-one
+              - heading-two
+              - heading-three
+              - quote
+              - bulleted-list
+              - numbered-list
+            editor_components:
+              - image
           - { label: "Profile Image", name: "image", widget: "image" }
 
   - name: "news"
