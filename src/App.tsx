@@ -34,6 +34,7 @@ import {
 import { HashRouter, Routes, Route, Link, useLocation, useParams } from "react-router-dom";
 import React, { useState, useEffect, createContext, useContext } from "react";
 import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { fetchJson, fetchCollection } from "./services/dataService";
 
 // Initial placeholders to prevent crashes before fetch
@@ -324,8 +325,8 @@ const Profile = () => {
           {profileData.title && (
             <p className="text-2xl primary-text-color font-semibold mb-6">{profileData.title}</p>
           )}
-          <div className="text-lg text-slate-300 leading-relaxed [&_h1]:mt-8 [&_h1]:mb-4 [&_h1]:text-4xl [&_h1]:font-black [&_h2]:mt-7 [&_h2]:mb-3 [&_h2]:text-3xl [&_h2]:font-bold [&_h3]:mt-6 [&_h3]:mb-3 [&_h3]:text-2xl [&_h3]:font-bold [&_h4]:mt-5 [&_h4]:mb-2 [&_h4]:text-xl [&_h4]:font-bold [&_h5]:mt-4 [&_h5]:mb-2 [&_h5]:font-bold [&_h6]:mt-4 [&_h6]:mb-2 [&_h6]:font-bold [&_p]:mb-6 [&_a]:text-primary [&_a]:underline [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:mb-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:mb-2 [&_blockquote]:mb-6 [&_blockquote]:border-l-4 [&_blockquote]:border-primary [&_blockquote]:pl-4 [&_blockquote]:italic [&_img]:my-6 [&_img]:rounded-2xl">
-            <Markdown>{Array.isArray(profileData.bio) ? profileData.bio.join("\n\n") : profileData.bio}</Markdown>
+          <div className="overflow-x-auto text-lg text-slate-300 leading-relaxed [&_h1]:mt-8 [&_h1]:mb-4 [&_h1]:text-4xl [&_h1]:font-black [&_h2]:mt-7 [&_h2]:mb-3 [&_h2]:text-3xl [&_h2]:font-bold [&_h3]:mt-6 [&_h3]:mb-3 [&_h3]:text-2xl [&_h3]:font-bold [&_h4]:mt-5 [&_h4]:mb-2 [&_h4]:text-xl [&_h4]:font-bold [&_h5]:mt-4 [&_h5]:mb-2 [&_h5]:font-bold [&_h6]:mt-4 [&_h6]:mb-2 [&_h6]:font-bold [&_p]:mb-6 [&_a]:text-primary [&_a]:underline [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:mb-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:mb-2 [&_blockquote]:mb-6 [&_blockquote]:border-l-4 [&_blockquote]:border-primary [&_blockquote]:pl-4 [&_blockquote]:italic [&_img]:my-6 [&_img]:rounded-2xl [&_table]:mb-6 [&_table]:w-full [&_table]:border-collapse [&_th]:border [&_th]:border-white/20 [&_th]:bg-white/10 [&_th]:p-3 [&_th]:text-left [&_td]:border [&_td]:border-white/20 [&_td]:p-3">
+            <Markdown remarkPlugins={[remarkGfm]}>{Array.isArray(profileData.bio) ? profileData.bio.join("\n\n") : profileData.bio}</Markdown>
           </div>
         </div>
       </div>

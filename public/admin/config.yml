@@ -65,7 +65,9 @@ collections:
               - bulleted-list
               - numbered-list
             editor_components:
+              - code-block
               - image
+              - table
           - { label: "Profile Image", name: "image", widget: "image" }
 
   - name: "news"
