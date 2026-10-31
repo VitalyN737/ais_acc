@@ -102,6 +102,14 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => (
 
 const Home = () => {
   const { homeData, performances, news } = useData();
+  // Local YYYY-MM-DD; performances happening today still count as upcoming
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  const futurePerformances = performances.filter((perf: any) => !perf.date || perf.date >= today);
+  // Fall back to the 2 most recent past performances when nothing is scheduled
+  const upcomingPerformances = futurePerformances.length > 0
+    ? futurePerformances
+    : performances.filter((perf: any) => perf.date).slice(-2);
   const socialLinks = [
     { name: "Facebook", href: "https://www.facebook.com/vitalyyushmanov/", Icon: Facebook },
     { name: "Twitter", href: "https://twitter.com/vitaly_jpn", Icon: Twitter },
@@ -178,7 +186,7 @@ const Home = () => {
         </Link>
       </div>
       <div className="flex flex-col gap-4">
-        {performances.slice(0, 2).map((perf, idx) => (
+        {upcomingPerformances.slice(0, 2).map((perf, idx) => (
           <Link key={idx} to={`/schedule/${perf.id}`}>
             <motion.div 
               whileHover={{ x: 10 }}
@@ -220,10 +228,6 @@ const Home = () => {
         {news.slice(0, 3).map((item, idx) => (
           <Link key={idx} to={`/news/${item.id}`}>
             <motion.div whileHover={{ y: -5 }} className="glass-card rounded-2xl overflow-hidden group cursor-pointer border border-white/5 hover:border-primary/50 transition-all h-full">
-              <div className="h-48 bg-cover bg-center overflow-hidden relative">
-                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style={{ backgroundImage: `url('${item.image}')` }}></div>
-                <div className="absolute inset-0 bg-[#0A141F]/40 group-hover:bg-[#0A141F]/20 transition-all"></div>
-              </div>
               <div className="p-6">
               <span className="text-[10px] font-bold primary-text-color uppercase tracking-[0.2em] mb-2 block">{item.category}</span>
               <h3 className="text-xl font-bold mb-2 group-hover:primary-text-color transition-colors">{item.title}</h3>
@@ -279,6 +283,13 @@ const Schedule = () => {
   );
 };
 
+// "2026-06-01" -> "Jun 1, 2026"; parsed as a local date to avoid timezone shifts
+const formatNewsDate = (date?: string) => {
+  const [year, month, day] = String(date || "").split("-").map(Number);
+  if (!year || !month || !day) return "";
+  return new Date(year, month - 1, day).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+};
+
 const News = () => {
   const { news } = useData();
   return (
@@ -289,14 +300,10 @@ const News = () => {
         {news.map((item, idx) => (
           <Link key={idx} to={`/news/${item.id}`}>
             <div className="glass-card rounded-[2rem] overflow-hidden group cursor-pointer border border-white/5 hover:border-primary/50 transition-all h-full">
-              <div className="h-64 bg-cover bg-center overflow-hidden relative">
-                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: `url('${item.image}')` }}></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0A141F] to-transparent opacity-60"></div>
-              </div>
               <div className="p-8">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-bold primary-text-color uppercase tracking-[0.2em]">{item.category}</span>
-                  <span className="text-xs text-slate-500">Oct 24, 2024</span>
+                  <span className="text-xs text-slate-500">{formatNewsDate(item.date)}</span>
                 </div>
                 <h3 className="text-2xl font-bold mb-4 leading-tight group-hover:primary-text-color transition-colors">{item.title}</h3>
                 <p className="text-slate-400 leading-relaxed mb-6">{item.description}</p>
@@ -744,7 +751,6 @@ const NewsDetail = () => {
           <ArrowRight className="size-4 rotate-180" /> Back to News
         </Link>
         <div className="glass-card rounded-[3rem] overflow-hidden border border-white/10">
-          <div className="h-[400px] bg-cover bg-center" style={{ backgroundImage: `url('${item.image}')` }}></div>
           <div className="p-10 md:p-16">
             <span className="primary-text-color font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{item.category}</span>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-8 leading-tight">{item.title}</h1>
@@ -754,7 +760,7 @@ const NewsDetail = () => {
               </div>
               <div>
                 <p className="font-bold">Vitaly Yushmanov</p>
-                <p className="text-xs text-slate-500">Oct 24, 2024 • 5 min read</p>
+                <p className="text-xs text-slate-500">{[formatNewsDate(item.date), "5 min read"].filter(Boolean).join(" • ")}</p>
               </div>
             </div>
             <div className="text-lg text-slate-300 leading-relaxed space-y-6">
@@ -1340,8 +1346,16 @@ export default function App() {
       setContactData(contact);
       setFooterData(footer);
       setMenuData(menu);
-      setNews(newsData);
-      setPerformances(perfData);
+      // Newest news first (undated last)
+      setNews([...newsData].sort((a: any, b: any) => String(b.date || "").localeCompare(String(a.date || ""))));
+      // Derive month/day from the CMS date field and show the earliest performances first (undated last)
+      const sortedPerformances = perfData
+        .map((perf: any) => {
+          const [, month, day] = String(perf.date || "").split("-");
+          return month && day ? { ...perf, month: String(Number(month)), day: String(Number(day)) } : perf;
+        })
+        .sort((a: any, b: any) => String(a.date || "9999").localeCompare(String(b.date || "9999")));
+      setPerformances(sortedPerformances);
       setGalleryItems(galleryData);
       setMediaItems(mediaData);
       setRepertoireItems(repData);
