@@ -1,0 +1,123 @@
+{
+  "global": {
+    "siteTitle": "Vitaly Yushmanov",
+    "siteName": "VITALY YUSHMANOV",
+    "siteSubtitle": "Baritone",
+    "emailLink": "mailto:info@joyfularts.co.jp",
+    "rssLink": "",
+    "shareLink": ""
+  },
+  "social": [
+    {
+      "name": "Facebook",
+      "url": "https://www.facebook.com/vitalyyushmanov/",
+      "icon": "facebook"
+    },
+    {
+      "name": "Twitter",
+      "url": "https://twitter.com/vitaly_jpn",
+      "icon": "twitter"
+    },
+    {
+      "name": "Instagram",
+      "url": "https://www.instagram.com/vitaly_y_japan/",
+      "icon": "instagram"
+    },
+    {
+      "name": "Youtube",
+      "url": "https://www.youtube.com/channel/UCuZ_sPJ9OzC4Z6xdVc9G02Q",
+      "icon": "youtube"
+    }
+  ],
+  "schedule": {
+    "title": "Performance Schedule",
+    "bookTickets": "Book Tickets"
+  },
+  "performanceDetail": {
+    "back": "Back to Schedule",
+    "notFound": "Performance not found",
+    "detailsTitle": "Event Details",
+    "ticketsTitle": "Tickets",
+    "bookNow": "Book Now",
+    "aboutTitle": "About the Performance"
+  },
+  "news": {
+    "title": "Latest News & Updates",
+    "readMore": "Read Full Story"
+  },
+  "newsDetail": {
+    "back": "Back to News",
+    "notFound": "News not found",
+    "author": "Vitaly Yushmanov"
+  },
+  "profile": {
+    "label": "Biography"
+  },
+  "gallery": {
+    "title": "Gallery",
+    "back": "Back to Gallery",
+    "notFound": "Image not found"
+  },
+  "media": {
+    "title": "Media & Recordings",
+    "videosTitle": "Featured Videos",
+    "audioTitle": "Audio Clips",
+    "audioFallback": "Audio Recording",
+    "back": "Back to Media",
+    "notFound": "Media not found",
+    "videoLabel": "Video",
+    "audioLabel": "Audio",
+    "durationLabel": "Duration",
+    "nowPlaying": "Now Playing",
+    "audioUnsupported": "Your browser does not support the audio element."
+  },
+  "cd": {
+    "title": "Discography",
+    "featuredLabel": "Latest Release",
+    "buy": "Buy CD",
+    "stream": "Stream",
+    "back": "Back to Discography",
+    "notFound": "Album not found",
+    "releaseSuffix": "Release",
+    "buyDetail": "Buy Physical CD",
+    "streamDetail": "Stream Now",
+    "aboutTitle": "About the Album",
+    "tracklistTitle": "Tracklist"
+  },
+  "books": {
+    "title": "Books",
+    "featuredLabel": "Featured Book",
+    "buy": "Buy Book",
+    "details": "Details",
+    "back": "Back to Books",
+    "notFound": "Book not found",
+    "buyDetail": "Buy Book",
+    "moreDetails": "More Details",
+    "aboutTitle": "About the Book",
+    "contentsTitle": "Contents"
+  },
+  "repertoire": {
+    "title": "Repertoire",
+    "operaTitle": "Operatic Roles",
+    "concertTitle": "Concert & Oratorio",
+    "back": "Back to Repertoire",
+    "notFound": "Repertoire item not found",
+    "fromLabel": "from",
+    "aboutTitle": "About the Role",
+    "firstPerformanceTitle": "First Performance",
+    "notableProductionTitle": "Notable Production"
+  },
+  "contact": {
+    "label": "Get in Touch",
+    "managementTitle": "General Management",
+    "nameLabel": "Name",
+    "namePlaceholder": "Your Name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "subjectLabel": "Subject",
+    "subjectPlaceholder": "Performance Inquiry",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Your message here...",
+    "submit": "Send Message"
+  }
+}

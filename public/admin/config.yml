@@ -39,6 +39,7 @@ collections:
               - { label: "Full Schedule", name: "fullSchedule", widget: "string" }
               - { label: "Book Tickets", name: "bookTickets", widget: "string" }
               - { label: "Latest News", name: "latestNews", widget: "string" }
+              - { label: "View All (news link)", name: "viewAll", widget: "string" }
 
   - name: "profile"
     label: "Profile"
@@ -82,6 +83,7 @@ collections:
       - { label: "Category", name: "category", widget: "string" }
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Description", name: "description", widget: "text" }
+      - { label: "Read Time (e.g. 5 min read)", name: "readTime", widget: "string", required: false }
       - { label: "Body", name: "body", widget: "markdown" }
 
   - name: "performances"
@@ -95,8 +97,25 @@ collections:
       - { label: "ID", name: "id", widget: "string" }
       - { label: "Date", name: "date", widget: "datetime", time_format: false, format: "YYYY-MM-DD" }
       - { label: "Title", name: "title", widget: "string" }
+      - { label: "Subtitle (e.g. Opera in 3 Acts)", name: "subtitle", widget: "string", required: false }
       - { label: "Location", name: "location", widget: "string" }
       - { label: "Active", name: "active", widget: "boolean" }
+      - label: "Event Details"
+        name: "details"
+        widget: "list"
+        required: false
+        hint: "Rows like Time / 19:00 JST, Duration / 2h 30m"
+        fields:
+          - { label: "Label", name: "label", widget: "string" }
+          - { label: "Value", name: "value", widget: "string" }
+      - label: "Tickets"
+        name: "tickets"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Seat / Ticket Type", name: "label", widget: "string" }
+          - { label: "Price", name: "price", widget: "string" }
+      - { label: "Ticket Booking URL", name: "ticketUrl", widget: "string", required: false }
       - { label: "Body", name: "body", widget: "markdown" }
 
   - name: "gallery"
@@ -126,6 +145,8 @@ collections:
       - { label: "Subtitle", name: "subtitle", widget: "string", required: false }
       - { label: "Image", name: "image", widget: "image", required: false }
       - { label: "Duration", name: "duration", widget: "string", required: false }
+      - { label: "Video Embed URL (video only)", name: "videoUrl", widget: "string", required: false }
+      - { label: "Audio File (audio only)", name: "audioUrl", widget: "file", required: false }
       - { label: "Body", name: "body", widget: "markdown" }
 
   - name: "repertoire"
@@ -141,6 +162,8 @@ collections:
       - { label: "Role/Work", name: "role", widget: "string" }
       - { label: "Opera", name: "opera", widget: "string", required: false }
       - { label: "Type", name: "type", widget: "select", options: ["opera", "concert"] }
+      - { label: "First Performance", name: "firstPerformance", widget: "string", required: false }
+      - { label: "Notable Production", name: "notableProduction", widget: "string", required: false }
       - { label: "Body", name: "body", widget: "markdown" }
 
   - name: "cds"
@@ -215,6 +238,14 @@ collections:
             fields:
               - { label: "Name", name: "name", widget: "string" }
               - { label: "Link", name: "link", widget: "string" }
+              - label: "Display"
+                name: "display"
+                widget: "select"
+                default: "link"
+                options:
+                  - { label: "Text link", value: "link" }
+                  - { label: "Button", value: "button" }
+                  - { label: "Primary button", value: "primary-button" }
 
   - name: "footer"
     label: "Footer"
@@ -230,3 +261,154 @@ collections:
             fields:
               - { label: "Name", name: "name", widget: "string" }
               - { label: "URL", name: "url", widget: "string" }
+
+  - name: "site"
+    label: "Site Texts"
+    files:
+      - file: "src/content/site.json"
+        label: "Headings, Buttons & Labels"
+        name: "site"
+        fields:
+          - name: "global"
+            label: "Site-wide (header, footer, icons)"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Browser Tab Title", name: "siteTitle", widget: "string" }
+              - { label: "Site Name (header & footer)", name: "siteName", widget: "string" }
+              - { label: "Subtitle under Name", name: "siteSubtitle", widget: "string" }
+              - { label: "Email Icon Link (e.g. mailto:...)", name: "emailLink", widget: "string", required: false, hint: "Empty hides the icon" }
+              - { label: "RSS Icon Link", name: "rssLink", widget: "string", required: false, hint: "Empty hides the icon" }
+              - { label: "Share Icon Link (Contact page)", name: "shareLink", widget: "string", required: false, hint: "Empty hides the icon" }
+          - label: "Social Links (Home page)"
+            name: "social"
+            widget: "list"
+            collapsed: true
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "URL", name: "url", widget: "string" }
+              - { label: "Icon", name: "icon", widget: "select", options: ["facebook", "twitter", "instagram", "youtube", "other"] }
+          - name: "schedule"
+            label: "Schedule Page"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Page Title", name: "title", widget: "string" }
+              - { label: "Book Tickets Button", name: "bookTickets", widget: "string" }
+          - name: "performanceDetail"
+            label: "Performance Detail Page"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Back Link", name: "back", widget: "string" }
+              - { label: "Not Found Message", name: "notFound", widget: "string" }
+              - { label: "Event Details Heading", name: "detailsTitle", widget: "string" }
+              - { label: "Tickets Heading", name: "ticketsTitle", widget: "string" }
+              - { label: "Book Now Button", name: "bookNow", widget: "string" }
+              - { label: "About Heading", name: "aboutTitle", widget: "string" }
+          - name: "news"
+            label: "News Page"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Page Title", name: "title", widget: "string" }
+              - { label: "Read More Link", name: "readMore", widget: "string" }
+          - name: "newsDetail"
+            label: "News Detail Page"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Back Link", name: "back", widget: "string" }
+              - { label: "Not Found Message", name: "notFound", widget: "string" }
+              - { label: "Author Name", name: "author", widget: "string" }
+          - name: "profile"
+            label: "Profile Page"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Small Label above Name", name: "label", widget: "string" }
+          - name: "gallery"
+            label: "Gallery Pages"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Page Title", name: "title", widget: "string" }
+              - { label: "Back Link", name: "back", widget: "string" }
+              - { label: "Not Found Message", name: "notFound", widget: "string" }
+          - name: "media"
+            label: "Media Pages"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Page Title", name: "title", widget: "string" }
+              - { label: "Videos Heading", name: "videosTitle", widget: "string" }
+              - { label: "Audio Heading", name: "audioTitle", widget: "string" }
+              - { label: "Audio Subtitle Fallback", name: "audioFallback", widget: "string" }
+              - { label: "Back Link", name: "back", widget: "string" }
+              - { label: "Not Found Message", name: "notFound", widget: "string" }
+              - { label: "Video Type Label", name: "videoLabel", widget: "string" }
+              - { label: "Audio Type Label", name: "audioLabel", widget: "string" }
+              - { label: "Duration Label", name: "durationLabel", widget: "string" }
+              - { label: "Now Playing Label", name: "nowPlaying", widget: "string" }
+              - { label: "Audio Not Supported Message", name: "audioUnsupported", widget: "string" }
+          - name: "cd"
+            label: "CD Pages"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Page Title", name: "title", widget: "string" }
+              - { label: "Featured CD Label", name: "featuredLabel", widget: "string" }
+              - { label: "Buy Button (list)", name: "buy", widget: "string" }
+              - { label: "Stream Button (list)", name: "stream", widget: "string" }
+              - { label: "Back Link", name: "back", widget: "string" }
+              - { label: "Not Found Message", name: "notFound", widget: "string" }
+              - { label: "Text after Year (detail)", name: "releaseSuffix", widget: "string", required: false }
+              - { label: "Buy Button (detail)", name: "buyDetail", widget: "string" }
+              - { label: "Stream Button (detail)", name: "streamDetail", widget: "string" }
+              - { label: "About Heading", name: "aboutTitle", widget: "string" }
+              - { label: "Tracklist Heading", name: "tracklistTitle", widget: "string" }
+          - name: "books"
+            label: "Books Pages"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Page Title", name: "title", widget: "string" }
+              - { label: "Featured Book Label", name: "featuredLabel", widget: "string" }
+              - { label: "Buy Button (list)", name: "buy", widget: "string" }
+              - { label: "Details Button (list)", name: "details", widget: "string" }
+              - { label: "Back Link", name: "back", widget: "string" }
+              - { label: "Not Found Message", name: "notFound", widget: "string" }
+              - { label: "Buy Button (detail)", name: "buyDetail", widget: "string" }
+              - { label: "More Details Button (detail)", name: "moreDetails", widget: "string" }
+              - { label: "About Heading", name: "aboutTitle", widget: "string" }
+              - { label: "Contents Heading", name: "contentsTitle", widget: "string" }
+          - name: "repertoire"
+            label: "Repertoire Pages"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Page Title", name: "title", widget: "string" }
+              - { label: "Operatic Roles Heading", name: "operaTitle", widget: "string" }
+              - { label: "Concert Heading", name: "concertTitle", widget: "string" }
+              - { label: "Back Link", name: "back", widget: "string" }
+              - { label: "Not Found Message", name: "notFound", widget: "string" }
+              - { label: "Word before Opera Name (from)", name: "fromLabel", widget: "string", required: false }
+              - { label: "About Heading", name: "aboutTitle", widget: "string" }
+              - { label: "First Performance Heading", name: "firstPerformanceTitle", widget: "string" }
+              - { label: "Notable Production Heading", name: "notableProductionTitle", widget: "string" }
+          - name: "contact"
+            label: "Contact Page"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Small Label above Title", name: "label", widget: "string" }
+              - { label: "Management Heading", name: "managementTitle", widget: "string" }
+              - { label: "Name Field Label", name: "nameLabel", widget: "string" }
+              - { label: "Name Placeholder", name: "namePlaceholder", widget: "string" }
+              - { label: "Email Field Label", name: "emailLabel", widget: "string" }
+              - { label: "Email Placeholder", name: "emailPlaceholder", widget: "string" }
+              - { label: "Subject Field Label", name: "subjectLabel", widget: "string" }
+              - { label: "Subject Placeholder", name: "subjectPlaceholder", widget: "string" }
+              - { label: "Message Field Label", name: "messageLabel", widget: "string" }
+              - { label: "Message Placeholder", name: "messagePlaceholder", widget: "string" }
+              - { label: "Send Button", name: "submit", widget: "string" }

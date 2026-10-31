@@ -64,6 +64,53 @@ const defaultMenuItems = [
   { name: "Contact", link: "/contact" }
 ];
 const initialMenu = { items: defaultMenuItems };
+// Fixed page texts, editable in Sveltia ("Site Texts"); used as fallbacks for missing keys
+const defaultSite = {
+  global: { siteTitle: "Vitaly Yushmanov", siteName: "VITALY YUSHMANOV", siteSubtitle: "Baritone", emailLink: "", rssLink: "", shareLink: "" },
+  social: [
+    { name: "Facebook", url: "https://www.facebook.com/vitalyyushmanov/", icon: "facebook" },
+    { name: "Twitter", url: "https://twitter.com/vitaly_jpn", icon: "twitter" },
+    { name: "Instagram", url: "https://www.instagram.com/vitaly_y_japan/", icon: "instagram" },
+    { name: "Youtube", url: "https://www.youtube.com/channel/UCuZ_sPJ9OzC4Z6xdVc9G02Q", icon: "youtube" }
+  ],
+  schedule: { title: "Performance Schedule", bookTickets: "Book Tickets" },
+  performanceDetail: { back: "Back to Schedule", notFound: "Performance not found", detailsTitle: "Event Details", ticketsTitle: "Tickets", bookNow: "Book Now", aboutTitle: "About the Performance" },
+  news: { title: "Latest News & Updates", readMore: "Read Full Story" },
+  newsDetail: { back: "Back to News", notFound: "News not found", author: "Vitaly Yushmanov" },
+  profile: { label: "Biography" },
+  gallery: { title: "Gallery", back: "Back to Gallery", notFound: "Image not found" },
+  media: {
+    title: "Media & Recordings", videosTitle: "Featured Videos", audioTitle: "Audio Clips", audioFallback: "Audio Recording",
+    back: "Back to Media", notFound: "Media not found", videoLabel: "Video", audioLabel: "Audio", durationLabel: "Duration",
+    nowPlaying: "Now Playing", audioUnsupported: "Your browser does not support the audio element."
+  },
+  cd: {
+    title: "Discography", featuredLabel: "Latest Release", buy: "Buy CD", stream: "Stream", back: "Back to Discography",
+    notFound: "Album not found", releaseSuffix: "Release", buyDetail: "Buy Physical CD", streamDetail: "Stream Now",
+    aboutTitle: "About the Album", tracklistTitle: "Tracklist"
+  },
+  books: {
+    title: "Books", featuredLabel: "Featured Book", buy: "Buy Book", details: "Details", back: "Back to Books",
+    notFound: "Book not found", buyDetail: "Buy Book", moreDetails: "More Details", aboutTitle: "About the Book", contentsTitle: "Contents"
+  },
+  repertoire: {
+    title: "Repertoire", operaTitle: "Operatic Roles", concertTitle: "Concert & Oratorio", back: "Back to Repertoire",
+    notFound: "Repertoire item not found", fromLabel: "from", aboutTitle: "About the Role",
+    firstPerformanceTitle: "First Performance", notableProductionTitle: "Notable Production"
+  },
+  contact: {
+    label: "Get in Touch", managementTitle: "General Management", nameLabel: "Name", namePlaceholder: "Your Name",
+    emailLabel: "Email", emailPlaceholder: "your@email.com", subjectLabel: "Subject", subjectPlaceholder: "Performance Inquiry",
+    messageLabel: "Message", messagePlaceholder: "Your message here...", submit: "Send Message"
+  }
+};
+const mergeSite = (data: any): typeof defaultSite => Object.fromEntries(
+  Object.entries(defaultSite).map(([key, value]) => [
+    key,
+    Array.isArray(value) ? (Array.isArray(data?.[key]) ? data[key] : value) : { ...value, ...(data?.[key] || {}) }
+  ])
+) as typeof defaultSite;
+const socialIcons: Record<string, typeof Facebook> = { facebook: Facebook, twitter: Twitter, instagram: Instagram, youtube: Youtube };
 
 const DataContext = createContext<any>(null);
 
@@ -77,6 +124,7 @@ const useData = () => {
       contactData: initialContact,
       footerData: initialFooter,
       menuData: initialMenu,
+      site: defaultSite,
       news: [],
       performances: [],
       galleryItems: [],
@@ -101,7 +149,7 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 const Home = () => {
-  const { homeData, performances, news } = useData();
+  const { homeData, performances, news, site } = useData();
   // Local YYYY-MM-DD; performances happening today still count as upcoming
   const now = new Date();
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
@@ -110,12 +158,11 @@ const Home = () => {
   const upcomingPerformances = futurePerformances.length > 0
     ? futurePerformances
     : performances.filter((perf: any) => perf.date).slice(-2);
-  const socialLinks = [
-    { name: "Facebook", href: "https://www.facebook.com/vitalyyushmanov/", Icon: Facebook },
-    { name: "Twitter", href: "https://twitter.com/vitaly_jpn", Icon: Twitter },
-    { name: "Instagram", href: "https://www.instagram.com/vitaly_y_japan/", Icon: Instagram },
-    { name: "Youtube", href: "https://www.youtube.com/channel/UCuZ_sPJ9OzC4Z6xdVc9G02Q", Icon: Youtube },
-  ];
+  const socialLinks = site.social.map((link: { name: string; url: string; icon: string }) => ({
+    name: link.name,
+    href: link.url,
+    Icon: socialIcons[link.icon] || ExternalLink
+  }));
 
   return (
     <PageWrapper>
@@ -221,7 +268,7 @@ const Home = () => {
       <div className="flex items-center justify-between mb-8 px-2">
         <h2 className="text-3xl font-bold tracking-tight">{homeData.labels?.latestNews || "Latest News"}</h2>
           <Link to="/news" className="primary-text-color font-bold text-sm uppercase tracking-widest flex items-center gap-2 group">
-          View All <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
+          {homeData.labels?.viewAll || "View All"} <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -243,11 +290,11 @@ const Home = () => {
 };
 
 const Schedule = () => {
-  const { performances } = useData();
+  const { performances, site } = useData();
   return (
     <PageWrapper>
       <div className="py-10">
-      <h2 className="text-4xl font-black mb-10 tracking-tight">Performance Schedule</h2>
+      <h2 className="text-4xl font-black mb-10 tracking-tight">{site.schedule.title}</h2>
       <div className="flex flex-col gap-6">
         {performances.map((perf, idx) => (
           <Link key={idx} to={`/schedule/${perf.id}`}>
@@ -263,12 +310,12 @@ const Schedule = () => {
                     <MapPin className="size-4 text-primary" />
                     {perf.location}
                   </p>
-                  <span className="text-xs primary-text-color font-bold uppercase tracking-widest mt-2">Opera in 3 Acts</span>
+                  {perf.subtitle && <span className="text-xs primary-text-color font-bold uppercase tracking-widest mt-2">{perf.subtitle}</span>}
                 </div>
               </div>
               <div className="mt-6 md:mt-0 flex gap-4">
                 <button className="px-8 py-3 rounded-xl border border-primary primary-text-color font-bold hover:bg-primary hover:text-white transition-all">
-                  Book Tickets
+                  {site.schedule.bookTickets}
                 </button>
                 <div className="px-4 py-3 rounded-xl glass hover:bg-white/10 transition-all">
                   <Share2 className="size-5" />
@@ -291,11 +338,11 @@ const formatNewsDate = (date?: string) => {
 };
 
 const News = () => {
-  const { news } = useData();
+  const { news, site } = useData();
   return (
     <PageWrapper>
       <div className="py-10">
-      <h2 className="text-4xl font-black mb-10 tracking-tight">Latest News & Updates</h2>
+      <h2 className="text-4xl font-black mb-10 tracking-tight">{site.news.title}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {news.map((item, idx) => (
           <Link key={idx} to={`/news/${item.id}`}>
@@ -308,7 +355,7 @@ const News = () => {
                 <h3 className="text-2xl font-bold mb-4 leading-tight group-hover:primary-text-color transition-colors">{item.title}</h3>
                 <p className="text-slate-400 leading-relaxed mb-6">{item.description}</p>
                 <div className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest group/btn">
-                  Read Full Story <ArrowRight className="size-4 group-hover/btn:translate-x-1 transition-transform" />
+                  {site.news.readMore} <ArrowRight className="size-4 group-hover/btn:translate-x-1 transition-transform" />
                 </div>
               </div>
             </div>
@@ -321,13 +368,13 @@ const News = () => {
 };
 
 const Profile = () => {
-  const { profileData } = useData();
+  const { profileData, site } = useData();
   return (
     <PageWrapper>
       <div className="py-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
       <div className="flex flex-col gap-8">
         <div>
-          <span className="primary-text-color font-bold tracking-[0.3em] uppercase text-sm mb-2 block">Biography</span>
+          <span className="primary-text-color font-bold tracking-[0.3em] uppercase text-sm mb-2 block">{site.profile.label}</span>
           <h2 className="text-5xl font-black tracking-tight mb-3">{profileData.name}</h2>
           {profileData.title && (
             <p className="text-2xl primary-text-color font-semibold mb-6">{profileData.title}</p>
@@ -353,11 +400,11 @@ const Profile = () => {
 };
 
 const Gallery = () => {
-  const { galleryItems } = useData();
+  const { galleryItems, site } = useData();
   return (
     <PageWrapper>
       <div className="py-10">
-      <h2 className="text-4xl font-black mb-10 tracking-tight">Gallery</h2>
+      <h2 className="text-4xl font-black mb-10 tracking-tight">{site.gallery.title}</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {galleryItems.map((item) => (
           <Link key={item.id} to={`/gallery/${item.id}`}>
@@ -380,15 +427,15 @@ const Gallery = () => {
 };
 
 const Media = () => {
-  const { mediaItems } = useData();
+  const { mediaItems, site } = useData();
   return (
     <PageWrapper>
       <div className="py-10">
-      <h2 className="text-4xl font-black mb-10 tracking-tight">Media & Recordings</h2>
+      <h2 className="text-4xl font-black mb-10 tracking-tight">{site.media.title}</h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div className="flex flex-col gap-6">
           <h3 className="text-2xl font-bold flex items-center gap-3">
-            <Video className="text-primary" /> Featured Videos
+            <Video className="text-primary" /> {site.media.videosTitle}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
             {mediaItems.filter(m => m.type === "video").map(video => (
@@ -411,7 +458,7 @@ const Media = () => {
         </div>
         <div className="flex flex-col gap-6">
           <h3 className="text-2xl font-bold flex items-center gap-3">
-            <Music className="text-primary" /> Audio Clips
+            <Music className="text-primary" /> {site.media.audioTitle}
           </h3>
           <div className="flex flex-col gap-4">
             {mediaItems.filter(m => m.type === "audio").map((track) => (
@@ -424,7 +471,7 @@ const Media = () => {
                     </div>
                     <div className="flex flex-col">
                       <span className="font-bold text-lg group-hover:primary-text-color transition-colors">{track.title}</span>
-                      <span className="text-xs text-slate-500 uppercase tracking-widest">{track.subtitle || "Audio Recording"}</span>
+                      <span className="text-xs text-slate-500 uppercase tracking-widest">{track.subtitle || site.media.audioFallback}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 relative z-10">
@@ -443,11 +490,11 @@ const Media = () => {
 };
 
 const CD = () => {
-  const { cds } = useData();
+  const { cds, site } = useData();
   return (
     <PageWrapper>
       <div className="py-10">
-      <h2 className="text-4xl font-black mb-10 tracking-tight">Discography</h2>
+      <h2 className="text-4xl font-black mb-10 tracking-tight">{site.cd.title}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {cds.filter(cd => cd.featured).map(cd => (
           <Link key={cd.id} to={`/cd/${cd.id}`} className="block">
@@ -463,15 +510,15 @@ const CD = () => {
                 </div>
               </div>
               <div className="flex flex-col gap-4 flex-1 text-center md:text-left">
-                <span className="primary-text-color font-bold uppercase tracking-widest text-xs">Latest Release</span>
+                <span className="primary-text-color font-bold uppercase tracking-widest text-xs">{site.cd.featuredLabel}</span>
                 <h3 className="text-3xl font-black group-hover:primary-text-color transition-colors">{cd.title}</h3>
                 <p className="text-slate-400">{cd.description}</p>
                 <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-4">
                   <div className="px-6 py-2 rounded-lg bg-primary text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                    Buy CD <ExternalLink className="size-3" />
+                    {site.cd.buy} <ExternalLink className="size-3" />
                   </div>
                   <div className="px-6 py-2 rounded-lg glass text-xs font-bold uppercase tracking-widest">
-                    Stream
+                    {site.cd.stream}
                   </div>
                 </div>
               </div>
@@ -500,11 +547,11 @@ const CD = () => {
 };
 
 const Books = () => {
-  const { books } = useData();
+  const { books, site } = useData();
   return (
     <PageWrapper>
       <div className="py-10">
-      <h2 className="text-4xl font-black mb-10 tracking-tight">Books</h2>
+      <h2 className="text-4xl font-black mb-10 tracking-tight">{site.books.title}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {books.filter(book => book.featured).map(book => (
           <Link key={book.id} to={`/books/${book.id}`} className="block">
@@ -520,15 +567,15 @@ const Books = () => {
                 </div>
               </div>
               <div className="flex flex-col gap-4 flex-1 text-center md:text-left">
-                <span className="primary-text-color font-bold uppercase tracking-widest text-xs">Featured Book</span>
+                <span className="primary-text-color font-bold uppercase tracking-widest text-xs">{site.books.featuredLabel}</span>
                 <h3 className="text-3xl font-black group-hover:primary-text-color transition-colors">{book.title}</h3>
                 <p className="text-slate-400">{book.description}</p>
                 <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-4">
                   <div className="px-6 py-2 rounded-lg bg-primary text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                    Buy Book <ExternalLink className="size-3" />
+                    {site.books.buy} <ExternalLink className="size-3" />
                   </div>
                   <div className="px-6 py-2 rounded-lg glass text-xs font-bold uppercase tracking-widest">
-                    Details
+                    {site.books.details}
                   </div>
                 </div>
               </div>
@@ -557,15 +604,15 @@ const Books = () => {
 };
 
 const Repertoire = () => {
-  const { repertoireItems } = useData();
+  const { repertoireItems, site } = useData();
   return (
     <PageWrapper>
       <div className="py-10">
-      <h2 className="text-4xl font-black mb-10 tracking-tight">Repertoire</h2>
+      <h2 className="text-4xl font-black mb-10 tracking-tight">{site.repertoire.title}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div className="flex flex-col gap-8">
           <h3 className="text-2xl font-bold primary-text-color flex items-center gap-3">
-            <Theater className="size-6" /> Operatic Roles
+            <Theater className="size-6" /> {site.repertoire.operaTitle}
           </h3>
           <div className="flex flex-col gap-4">
             {repertoireItems.filter(i => i.type === "opera").map((item) => (
@@ -583,7 +630,7 @@ const Repertoire = () => {
         </div>
         <div className="flex flex-col gap-8">
           <h3 className="text-2xl font-bold primary-text-color flex items-center gap-3">
-            <Music className="size-6" /> Concert & Oratorio
+            <Music className="size-6" /> {site.repertoire.concertTitle}
           </h3>
           <div className="flex flex-col gap-4">
             {repertoireItems.filter(i => i.type === "concert").map((item) => (
@@ -591,7 +638,7 @@ const Repertoire = () => {
                 <div className="glass p-5 rounded-2xl flex justify-between items-center border border-white/5 hover:bg-white/5 transition-all group">
                   <div>
                     <span className="text-xs text-slate-500 uppercase tracking-widest">{item.composer}</span>
-                    <h4 className="text-xl font-bold group-hover:primary-text-color transition-colors">{item.work}</h4>
+                    <h4 className="text-xl font-bold group-hover:primary-text-color transition-colors">{item.work || item.role}</h4>
                   </div>
                 </div>
               </Link>
@@ -605,7 +652,7 @@ const Repertoire = () => {
 };
 
 const Contact = () => {
-  const { contactData } = useData();
+  const { contactData, site } = useData();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -649,7 +696,7 @@ const Contact = () => {
       <div className="py-10 grid grid-cols-1 lg:grid-cols-2 gap-16">
       <div className="flex flex-col gap-8">
         <div>
-          <span className="primary-text-color font-bold tracking-[0.3em] uppercase text-sm mb-2 block">Get in Touch</span>
+          <span className="primary-text-color font-bold tracking-[0.3em] uppercase text-sm mb-2 block">{site.contact.label}</span>
           <h2 className="text-5xl font-black tracking-tight mb-6">{contactData.title}</h2>
           <p className="text-lg text-slate-400 leading-relaxed">
             {contactData.description}
@@ -659,7 +706,7 @@ const Contact = () => {
         <div className="flex flex-col gap-6">
           <div className="glass p-8 rounded-3xl border border-white/10">
             <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <Award className="text-primary size-5" /> General Management
+              <Award className="text-primary size-5" /> {site.contact.managementTitle}
             </h3>
             <div className="flex flex-col gap-2 text-slate-300">
               <p className="font-bold text-white">{contactData.management.name}</p>
@@ -669,12 +716,16 @@ const Contact = () => {
           </div>
 
           <div className="flex gap-4">
-            <a href="#" className="size-14 rounded-2xl glass flex items-center justify-center hover:bg-primary/20 transition-all text-slate-400 hover:text-primary">
-              <Mail className="size-6" />
-            </a>
-            <a href="#" className="size-14 rounded-2xl glass flex items-center justify-center hover:bg-primary/20 transition-all text-slate-400 hover:text-primary">
-              <Share2 className="size-6" />
-            </a>
+            {site.global.emailLink && (
+              <a href={site.global.emailLink} className="size-14 rounded-2xl glass flex items-center justify-center hover:bg-primary/20 transition-all text-slate-400 hover:text-primary">
+                <Mail className="size-6" />
+              </a>
+            )}
+            {site.global.shareLink && (
+              <a href={site.global.shareLink} target="_blank" rel="noopener noreferrer" className="size-14 rounded-2xl glass flex items-center justify-center hover:bg-primary/20 transition-all text-slate-400 hover:text-primary">
+                <Share2 className="size-6" />
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -683,52 +734,52 @@ const Contact = () => {
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
-              <label className="text-xs uppercase tracking-widest font-bold text-slate-500 ml-1">Name</label>
+              <label className="text-xs uppercase tracking-widest font-bold text-slate-500 ml-1">{site.contact.nameLabel}</label>
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
                 className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition-all"
-                placeholder="Your Name"
+                placeholder={site.contact.namePlaceholder}
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-xs uppercase tracking-widest font-bold text-slate-500 ml-1">Email</label>
+              <label className="text-xs uppercase tracking-widest font-bold text-slate-500 ml-1">{site.contact.emailLabel}</label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
                 className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition-all"
-                placeholder="your@email.com"
+                placeholder={site.contact.emailPlaceholder}
               />
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <label className="text-xs uppercase tracking-widest font-bold text-slate-500 ml-1">Subject</label>
+            <label className="text-xs uppercase tracking-widest font-bold text-slate-500 ml-1">{site.contact.subjectLabel}</label>
             <input
               type="text"
               name="subject"
               value={formData.subject}
               onChange={handleInputChange}
               className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition-all"
-              placeholder="Performance Inquiry"
+              placeholder={site.contact.subjectPlaceholder}
             />
           </div>
           <div className="flex flex-col gap-2">
-            <label className="text-xs uppercase tracking-widest font-bold text-slate-500 ml-1">Message</label>
+            <label className="text-xs uppercase tracking-widest font-bold text-slate-500 ml-1">{site.contact.messageLabel}</label>
             <textarea
               rows={5}
               name="message"
               value={formData.message}
               onChange={handleInputChange}
               className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition-all resize-none"
-              placeholder="Your message here..."
+              placeholder={site.contact.messagePlaceholder}
             ></textarea>
           </div>
           <button className="bg-primary text-white font-bold py-4 rounded-xl shadow-xl shadow-primary/30 hover:-translate-y-1 transition-all">
-            Send Message
+            {site.contact.submit}
           </button>
         </form>
       </div>
@@ -739,16 +790,16 @@ const Contact = () => {
 
 const NewsDetail = () => {
   const { id } = useParams();
-  const { news } = useData();
+  const { news, site } = useData();
   const item = news.find((n: any) => n.id === id);
 
-  if (!item) return <div className="py-20 text-center">News not found</div>;
+  if (!item) return <div className="py-20 text-center">{site.newsDetail.notFound}</div>;
 
   return (
     <PageWrapper>
       <div className="py-10 max-w-4xl mx-auto">
         <Link to="/news" className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
-          <ArrowRight className="size-4 rotate-180" /> Back to News
+          <ArrowRight className="size-4 rotate-180" /> {site.newsDetail.back}
         </Link>
         <div className="glass-card rounded-[3rem] overflow-hidden border border-white/10">
           <div className="p-10 md:p-16">
@@ -759,8 +810,8 @@ const NewsDetail = () => {
                 <User className="text-primary size-6" />
               </div>
               <div>
-                <p className="font-bold">Vitaly Yushmanov</p>
-                <p className="text-xs text-slate-500">{[formatNewsDate(item.date), "5 min read"].filter(Boolean).join(" • ")}</p>
+                <p className="font-bold">{site.newsDetail.author}</p>
+                <p className="text-xs text-slate-500">{[formatNewsDate(item.date), item.readTime].filter(Boolean).join(" • ")}</p>
               </div>
             </div>
             <div className="text-lg text-slate-300 leading-relaxed space-y-6">
@@ -778,16 +829,19 @@ const NewsDetail = () => {
 
 const PerformanceDetail = () => {
   const { id } = useParams();
-  const { performances } = useData();
+  const { performances, site } = useData();
   const perf = performances.find((p: any) => p.id === id);
 
-  if (!perf) return <div className="py-20 text-center">Performance not found</div>;
+  if (!perf) return <div className="py-20 text-center">{site.performanceDetail.notFound}</div>;
+  const details = Array.isArray(perf.details) ? perf.details : [];
+  const tickets = Array.isArray(perf.tickets) ? perf.tickets : [];
+  const bookNowClass = "block text-center w-full py-4 bg-primary text-white font-bold rounded-xl shadow-xl shadow-primary/30 hover:-translate-y-1 transition-all mt-4";
 
   return (
     <PageWrapper>
       <div className="py-10 max-w-4xl mx-auto">
         <Link to="/schedule" className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
-          <ArrowRight className="size-4 rotate-180" /> Back to Schedule
+          <ArrowRight className="size-4 rotate-180" /> {site.performanceDetail.back}
         </Link>
         <div className="glass-card rounded-[3rem] overflow-hidden border border-white/10 p-10 md:p-16">
           <div className="flex flex-col md:flex-row gap-10 items-start md:items-center mb-12">
@@ -804,44 +858,48 @@ const PerformanceDetail = () => {
             </div>
           </div>
           
+          {(details.length > 0 || tickets.length > 0 || perf.ticketUrl) && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+            {details.length > 0 && (
             <div className="space-y-6">
-              <h3 className="text-2xl font-bold border-b border-white/5 pb-4">Event Details</h3>
+              <h3 className="text-2xl font-bold border-b border-white/5 pb-4">{site.performanceDetail.detailsTitle}</h3>
               <div className="space-y-4">
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Time</span>
-                  <span className="font-bold">19:00 JST</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Duration</span>
-                  <span className="font-bold">2h 30m (with intermission)</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Language</span>
-                  <span className="font-bold">Italian with Japanese subtitles</span>
-                </div>
+                {details.map((detail: { label: string; value: string }, idx: number) => (
+                  <div key={idx} className="flex justify-between">
+                    <span className="text-slate-500">{detail.label}</span>
+                    <span className="font-bold">{detail.value}</span>
+                  </div>
+                ))}
               </div>
             </div>
+            )}
+            {(tickets.length > 0 || perf.ticketUrl) && (
             <div className="space-y-6">
-              <h3 className="text-2xl font-bold border-b border-white/5 pb-4">Tickets</h3>
+              <h3 className="text-2xl font-bold border-b border-white/5 pb-4">{site.performanceDetail.ticketsTitle}</h3>
               <div className="space-y-4">
-                <div className="flex justify-between">
-                  <span className="text-slate-500">S Seat</span>
-                  <span className="font-bold">¥12,000</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">A Seat</span>
-                  <span className="font-bold">¥8,000</span>
-                </div>
-                <button className="w-full py-4 bg-primary text-white font-bold rounded-xl shadow-xl shadow-primary/30 hover:-translate-y-1 transition-all mt-4">
-                  Book Now
-                </button>
+                {tickets.map((ticket: { label: string; price: string }, idx: number) => (
+                  <div key={idx} className="flex justify-between">
+                    <span className="text-slate-500">{ticket.label}</span>
+                    <span className="font-bold">{ticket.price}</span>
+                  </div>
+                ))}
+                {perf.ticketUrl ? (
+                  <a href={perf.ticketUrl} target="_blank" rel="noopener noreferrer" className={bookNowClass}>
+                    {site.performanceDetail.bookNow}
+                  </a>
+                ) : (
+                  <button className={bookNowClass}>
+                    {site.performanceDetail.bookNow}
+                  </button>
+                )}
               </div>
             </div>
+            )}
           </div>
+          )}
 
           <div className="space-y-6">
-            <h3 className="text-2xl font-bold border-b border-white/5 pb-4">About the Performance</h3>
+            <h3 className="text-2xl font-bold border-b border-white/5 pb-4">{site.performanceDetail.aboutTitle}</h3>
             <div className="text-slate-300 leading-relaxed markdown-body">
               <Markdown>{perf.body}</Markdown>
             </div>
@@ -854,16 +912,16 @@ const PerformanceDetail = () => {
 
 const CDDetail = () => {
   const { id } = useParams();
-  const { cds } = useData();
+  const { cds, site } = useData();
   const cd = cds.find((c: any) => c.id === id);
 
-  if (!cd) return <div className="py-20 text-center">Album not found</div>;
+  if (!cd) return <div className="py-20 text-center">{site.cd.notFound}</div>;
 
   return (
     <PageWrapper>
       <div className="py-10 max-w-4xl mx-auto">
         <Link to="/cd" className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
-          <ArrowRight className="size-4 rotate-180" /> Back to Discography
+          <ArrowRight className="size-4 rotate-180" /> {site.cd.back}
         </Link>
         <div className="glass-card rounded-[3rem] overflow-hidden border border-white/10 p-10 md:p-16">
           <div className="flex flex-col md:flex-row gap-12 items-center md:items-start mb-16">
@@ -874,15 +932,15 @@ const CDDetail = () => {
               </div>
             </div>
             <div className="flex-1 text-center md:text-left">
-              <span className="primary-text-color font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{cd.year} Release</span>
+              <span className="primary-text-color font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{cd.year} {site.cd.releaseSuffix}</span>
               <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-tight">{cd.title}</h1>
               <p className="text-xl text-slate-400 mb-8 leading-relaxed">{cd.description}</p>
               <div className="flex flex-wrap justify-center md:justify-start gap-4">
                 <button className="px-10 py-4 bg-primary text-white font-bold rounded-xl shadow-xl shadow-primary/30 hover:-translate-y-1 transition-all flex items-center gap-2">
-                  Buy Physical CD <ExternalLink className="size-4" />
+                  {site.cd.buyDetail} <ExternalLink className="size-4" />
                 </button>
                 <button className="px-10 py-4 glass text-white font-bold rounded-xl hover:bg-white/10 transition-all">
-                  Stream Now
+                  {site.cd.streamDetail}
                 </button>
               </div>
             </div>
@@ -890,7 +948,7 @@ const CDDetail = () => {
 
           <div className="space-y-12">
             <section>
-              <h3 className="text-3xl font-bold border-b border-white/5 pb-6 mb-6">About the Album</h3>
+              <h3 className="text-3xl font-bold border-b border-white/5 pb-6 mb-6">{site.cd.aboutTitle}</h3>
               <div className="text-slate-300 leading-relaxed markdown-body">
                 <Markdown>{cd.body}</Markdown>
               </div>
@@ -898,7 +956,7 @@ const CDDetail = () => {
 
             {cd.tracks && cd.tracks.length > 0 && (
               <section>
-                <h3 className="text-3xl font-bold border-b border-white/5 pb-6 mb-8">Tracklist</h3>
+                <h3 className="text-3xl font-bold border-b border-white/5 pb-6 mb-8">{site.cd.tracklistTitle}</h3>
                 <div className="space-y-4">
                   {cd.tracks.map((track: string, idx: number) => (
                     <div key={idx} className="flex items-center justify-between p-6 rounded-2xl hover:bg-white/5 transition-all group border border-transparent hover:border-white/5">
@@ -923,16 +981,16 @@ const CDDetail = () => {
 
 const BookDetail = () => {
   const { id } = useParams();
-  const { books } = useData();
+  const { books, site } = useData();
   const book = books.find((b: any) => b.id === id);
 
-  if (!book) return <div className="py-20 text-center">Book not found</div>;
+  if (!book) return <div className="py-20 text-center">{site.books.notFound}</div>;
 
   return (
     <PageWrapper>
       <div className="py-10 max-w-4xl mx-auto">
         <Link to="/books" className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
-          <ArrowRight className="size-4 rotate-180" /> Back to Books
+          <ArrowRight className="size-4 rotate-180" /> {site.books.back}
         </Link>
         <div className="glass-card rounded-[3rem] overflow-hidden border border-white/10 p-10 md:p-16">
           <div className="flex flex-col md:flex-row gap-12 items-center md:items-start mb-16">
@@ -948,10 +1006,10 @@ const BookDetail = () => {
               <p className="text-xl text-slate-400 mb-8 leading-relaxed">{book.description}</p>
               <div className="flex flex-wrap justify-center md:justify-start gap-4">
                 <button className="px-10 py-4 bg-primary text-white font-bold rounded-xl shadow-xl shadow-primary/30 hover:-translate-y-1 transition-all flex items-center gap-2">
-                  Buy Book <ExternalLink className="size-4" />
+                  {site.books.buyDetail} <ExternalLink className="size-4" />
                 </button>
                 <button className="px-10 py-4 glass text-white font-bold rounded-xl hover:bg-white/10 transition-all">
-                  More Details
+                  {site.books.moreDetails}
                 </button>
               </div>
             </div>
@@ -959,7 +1017,7 @@ const BookDetail = () => {
 
           <div className="space-y-12">
             <section>
-              <h3 className="text-3xl font-bold border-b border-white/5 pb-6 mb-6">About the Book</h3>
+              <h3 className="text-3xl font-bold border-b border-white/5 pb-6 mb-6">{site.books.aboutTitle}</h3>
               <div className="text-slate-300 leading-relaxed markdown-body">
                 <Markdown>{book.body}</Markdown>
               </div>
@@ -967,7 +1025,7 @@ const BookDetail = () => {
 
             {book.contents && book.contents.length > 0 && (
               <section>
-                <h3 className="text-3xl font-bold border-b border-white/5 pb-6 mb-8">Contents</h3>
+                <h3 className="text-3xl font-bold border-b border-white/5 pb-6 mb-8">{site.books.contentsTitle}</h3>
                 <div className="space-y-4">
                   {book.contents.map((item: string, idx: number) => (
                     <div key={idx} className="flex items-center justify-between p-6 rounded-2xl hover:bg-white/5 transition-all group border border-transparent hover:border-white/5">
@@ -992,16 +1050,16 @@ const BookDetail = () => {
 
 const GalleryDetail = () => {
   const { id } = useParams();
-  const { galleryItems } = useData();
+  const { galleryItems, site } = useData();
   const item = galleryItems.find((g: any) => g.id === id);
 
-  if (!item) return <div className="py-20 text-center">Image not found</div>;
+  if (!item) return <div className="py-20 text-center">{site.gallery.notFound}</div>;
 
   return (
     <PageWrapper>
       <div className="py-10 max-w-5xl mx-auto">
         <Link to="/gallery" className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
-          <ArrowRight className="size-4 rotate-180" /> Back to Gallery
+          <ArrowRight className="size-4 rotate-180" /> {site.gallery.back}
         </Link>
         <div className="glass-card rounded-[3rem] overflow-hidden border border-white/10">
           <div className="aspect-square md:aspect-video bg-cover bg-center" style={{ backgroundImage: `url('${item.image}')` }}></div>
@@ -1017,16 +1075,16 @@ const GalleryDetail = () => {
 
 const MediaDetail = () => {
   const { id } = useParams();
-  const { mediaItems } = useData();
+  const { mediaItems, site } = useData();
   const item = mediaItems.find((m: any) => m.id === id);
 
-  if (!item) return <div className="py-20 text-center">Media not found</div>;
+  if (!item) return <div className="py-20 text-center">{site.media.notFound}</div>;
 
   return (
     <PageWrapper>
       <div className="py-10 max-w-5xl mx-auto">
         <Link to="/media" className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
-          <ArrowRight className="size-4 rotate-180" /> Back to Media
+          <ArrowRight className="size-4 rotate-180" /> {site.media.back}
         </Link>
         <div className="glass-card rounded-[3rem] overflow-hidden border border-white/10">
           {item.type === "video" ? (
@@ -1053,10 +1111,10 @@ const MediaDetail = () => {
             </div>
           )}
           <div className="p-10 md:p-16">
-            <span className="primary-text-color font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{item.type}</span>
+            <span className="primary-text-color font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{item.type === "video" ? site.media.videoLabel : site.media.audioLabel}</span>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-4">{item.title}</h1>
             {item.subtitle && <p className="text-xl text-slate-400 mb-8">{item.subtitle}</p>}
-            {item.duration && <p className="text-slate-500 font-mono mb-8">Duration: {item.duration}</p>}
+            {item.duration && <p className="text-slate-500 font-mono mb-8">{site.media.durationLabel}: {item.duration}</p>}
             
             <div className="text-slate-300 leading-relaxed markdown-body mb-10">
               <Markdown>{item.body}</Markdown>
@@ -1066,21 +1124,14 @@ const MediaDetail = () => {
               <div className="p-8 glass rounded-2xl border border-white/5">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="size-2 bg-primary rounded-full animate-pulse"></div>
-                  <span className="text-sm font-bold uppercase tracking-widest">Now Playing</span>
+                  <span className="text-sm font-bold uppercase tracking-widest">{site.media.nowPlaying}</span>
                 </div>
                 {item.audioUrl && (
-                  <audio controls className="w-full mb-6 accent-primary">
+                  <audio controls className="w-full accent-primary">
                     <source src={item.audioUrl} type="audio/mpeg" />
-                    Your browser does not support the audio element.
+                    {site.media.audioUnsupported}
                   </audio>
                 )}
-                <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full bg-primary w-1/3"></div>
-                </div>
-                <div className="flex justify-between mt-2 text-xs font-mono text-slate-500">
-                  <span>01:24</span>
-                  <span>{item.duration || "05:00"}</span>
-                </div>
               </div>
             )}
           </div>
@@ -1092,42 +1143,48 @@ const MediaDetail = () => {
 
 const RepertoireDetail = () => {
   const { id } = useParams();
-  const { repertoireItems } = useData();
+  const { repertoireItems, site } = useData();
   const item = repertoireItems.find((r: any) => r.id === id);
 
-  if (!item) return <div className="py-20 text-center">Repertoire item not found</div>;
+  if (!item) return <div className="py-20 text-center">{site.repertoire.notFound}</div>;
 
   return (
     <PageWrapper>
       <div className="py-10 max-w-4xl mx-auto">
         <Link to="/repertoire" className="flex items-center gap-2 primary-text-color font-bold uppercase text-xs tracking-widest mb-8 hover:-translate-x-1 transition-transform inline-flex">
-          <ArrowRight className="size-4 rotate-180" /> Back to Repertoire
+          <ArrowRight className="size-4 rotate-180" /> {site.repertoire.back}
         </Link>
         <div className="glass-card rounded-[3rem] p-10 md:p-16 border border-white/10">
           <span className="primary-text-color font-bold uppercase tracking-[0.3em] text-sm mb-4 block">{item.composer}</span>
           <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-tight">
-            {item.type === "opera" ? item.role : item.work}
+            {item.type === "opera" ? item.role : item.work || item.role}
           </h1>
-          {item.opera && <p className="text-2xl italic text-slate-400 mb-10">from {item.opera}</p>}
+          {item.opera && <p className="text-2xl italic text-slate-400 mb-10">{site.repertoire.fromLabel} {item.opera}</p>}
           
           <div className="space-y-12">
             <section>
-              <h3 className="text-2xl font-bold border-b border-white/5 pb-4 mb-6">About the Role</h3>
+              <h3 className="text-2xl font-bold border-b border-white/5 pb-4 mb-6">{site.repertoire.aboutTitle}</h3>
               <div className="text-lg text-slate-300 leading-relaxed markdown-body">
                 <Markdown>{item.body}</Markdown>
               </div>
             </section>
             
+            {(item.firstPerformance || item.notableProduction) && (
             <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {item.firstPerformance && (
               <div className="glass p-8 rounded-2xl border border-white/5">
-                <h4 className="font-bold mb-2">First Performance</h4>
-                <p className="text-slate-400">Tokyo Bunka Kaikan, 2016</p>
+                <h4 className="font-bold mb-2">{site.repertoire.firstPerformanceTitle}</h4>
+                <p className="text-slate-400">{item.firstPerformance}</p>
               </div>
+              )}
+              {item.notableProduction && (
               <div className="glass p-8 rounded-2xl border border-white/5">
-                <h4 className="font-bold mb-2">Notable Production</h4>
-                <p className="text-slate-400">European Tour, 2021</p>
+                <h4 className="font-bold mb-2">{site.repertoire.notableProductionTitle}</h4>
+                <p className="text-slate-400">{item.notableProduction}</p>
               </div>
+              )}
             </section>
+            )}
           </div>
         </div>
       </div>
@@ -1138,7 +1195,11 @@ const RepertoireDetail = () => {
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { footerData, menuData, refreshData } = useData();
+  const { footerData, menuData, site, refreshData } = useData();
+
+  useEffect(() => {
+    document.title = site.global.siteTitle;
+  }, [site.global.siteTitle]);
 
   // Close menu when location changes
   useEffect(() => {
@@ -1156,9 +1217,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const menuItems = Array.isArray(menuData?.items) && menuData.items.length > 0
     ? menuData.items
     : defaultMenuItems;
+  // "display" comes from Sveltia; older menu data without it keeps the original buttons
   const actionLinks = new Set(["/repertoire", "/contact"]);
-  const navItems = menuItems.filter((item: { name: string; link: string }) => !actionLinks.has(item.link));
-  const ctaItems = menuItems.filter((item: { name: string; link: string }) => actionLinks.has(item.link));
+  const menuDisplay = (item: { link: string; display?: string }) =>
+    item.display || (item.link === "/contact" ? "primary-button" : actionLinks.has(item.link) ? "button" : "link");
+  const navItems = menuItems.filter((item: { name: string; link: string }) => menuDisplay(item) === "link");
+  const ctaItems = menuItems.filter((item: { name: string; link: string }) => menuDisplay(item) !== "link");
   
   return (
     <div className="relative min-h-screen gradient-bg selection:bg-primary selection:text-white">
@@ -1174,8 +1238,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <Music className="size-8" />
             </div>
             <div className="flex flex-col">
-              <h2 className="text-lg font-black leading-none tracking-tight uppercase">VITALY YUSHMANOV</h2>
-              <span className="text-[10px] uppercase tracking-[0.2em] primary-text-color opacity-80 font-bold">Baritone</span>
+              <h2 className="text-lg font-black leading-none tracking-tight uppercase">{site.global.siteName}</h2>
+              <span className="text-[10px] uppercase tracking-[0.2em] primary-text-color opacity-80 font-bold">{site.global.siteSubtitle}</span>
             </div>
           </Link>
           
@@ -1194,7 +1258,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <div className="flex items-center gap-3">
             <div className="hidden lg:flex gap-3">
               {ctaItems.map((item: { name: string; link: string }) => {
-                const ctaClass = item.link === '/contact' ? 'cta-contact-button' : 'cta-repertoire-button';
+                const ctaClass = menuDisplay(item) === 'primary-button' ? 'cta-contact-button' : 'cta-repertoire-button';
 
                 return (
                   <Link key={item.link} to={item.link} className={ctaClass}>
@@ -1247,12 +1311,16 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               </nav>
 
               <div className="mt-auto flex gap-6">
-                <a href="#" className="size-12 rounded-xl glass flex items-center justify-center text-slate-400 hover:text-primary transition-all">
-                  <Mail className="size-6" />
-                </a>
-                <a href="#" className="size-12 rounded-xl glass flex items-center justify-center text-slate-400 hover:text-primary transition-all">
-                  <Rss className="size-6" />
-                </a>
+                {site.global.emailLink && (
+                  <a href={site.global.emailLink} className="size-12 rounded-xl glass flex items-center justify-center text-slate-400 hover:text-primary transition-all">
+                    <Mail className="size-6" />
+                  </a>
+                )}
+                {site.global.rssLink && (
+                  <a href={site.global.rssLink} className="size-12 rounded-xl glass flex items-center justify-center text-slate-400 hover:text-primary transition-all">
+                    <Rss className="size-6" />
+                  </a>
+                )}
               </div>
             </motion.div>
           )}
@@ -1270,7 +1338,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <div className="flex flex-col items-center md:items-start gap-2">
               <div className="flex items-center gap-2">
                 <Music className="size-6 text-primary" />
-                <h2 className="text-lg font-black tracking-tight uppercase">Vitaly Yushmanov</h2>
+                <h2 className="text-lg font-black tracking-tight uppercase">{site.global.siteName}</h2>
               </div>
               <p className="text-xs text-slate-500 uppercase tracking-[0.3em]">{footerData.copyright}</p>
             </div>
@@ -1290,9 +1358,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <Link to="/contact" className="size-10 rounded-lg glass-card flex items-center justify-center hover:bg-primary/20 transition-all text-slate-400 hover:text-primary">
                 <Mail className="size-4" />
               </Link>
-              <a href="#" className="size-10 rounded-lg glass-card flex items-center justify-center hover:bg-primary/20 transition-all text-slate-400 hover:text-primary">
-                <Rss className="size-4" />
-              </a>
+              {site.global.rssLink && (
+                <a href={site.global.rssLink} className="size-10 rounded-lg glass-card flex items-center justify-center hover:bg-primary/20 transition-all text-slate-400 hover:text-primary">
+                  <Rss className="size-4" />
+                </a>
+              )}
             </div>
           </div>
         </footer>
@@ -1307,6 +1377,7 @@ export default function App() {
   const [contactData, setContactData] = useState(initialContact);
   const [footerData, setFooterData] = useState(initialFooter);
   const [menuData, setMenuData] = useState(initialMenu);
+  const [site, setSite] = useState(defaultSite);
   const [news, setNews] = useState<any[]>([]);
   const [performances, setPerformances] = useState<any[]>([]);
   const [galleryItems, setGalleryItems] = useState<any[]>([]);
@@ -1323,7 +1394,7 @@ export default function App() {
       const timestamp = Date.now();
       console.log(`Fetching data with timestamp: ${timestamp}`);
       const [
-        home, profile, contact, footer, menu,
+        home, profile, contact, footer, menu, siteData,
         newsData, perfData, galleryData, mediaData, repData, cdsData, booksData
       ] = await Promise.all([
         fetchJson('home.json'),
@@ -1331,6 +1402,7 @@ export default function App() {
         fetchJson('contact.json'),
         fetchJson('footer.json'),
         fetchJson('menu.json'),
+        fetchJson('site.json').catch(() => ({})),
         fetchCollection('news'),
         fetchCollection('performances'),
         fetchCollection('gallery'),
@@ -1346,6 +1418,7 @@ export default function App() {
       setContactData(contact);
       setFooterData(footer);
       setMenuData(menu);
+      setSite(mergeSite(siteData));
       // Newest news first (undated last)
       setNews([...newsData].sort((a: any, b: any) => String(b.date || "").localeCompare(String(a.date || ""))));
       // Derive month/day from the CMS date field and show the earliest performances first (undated last)
@@ -1384,7 +1457,7 @@ export default function App() {
   }
 
   const dataValue = {
-    homeData, profileData, contactData, footerData, menuData,
+    homeData, profileData, contactData, footerData, menuData, site,
     news, performances, galleryItems, mediaItems, repertoireItems, cds, books,
     refreshData: () => setRefreshKey(prev => prev + 1)
   };

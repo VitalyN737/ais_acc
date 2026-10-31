@@ -2,43 +2,53 @@
   "items": [
     {
       "name": "スケジュール",
-      "link": "/schedule"
+      "link": "/schedule",
+      "display": "link"
     },
     {
       "name": "ニュース",
-      "link": "/news"
+      "link": "/news",
+      "display": "link"
     },
     {
       "name": "プロフィール",
-      "link": "/profile"
+      "link": "/profile",
+      "display": "link"
     },
     {
       "name": "ギャラリー",
-      "link": "/gallery"
+      "link": "/gallery",
+      "display": "link"
     },
     {
       "name": "メディア",
-      "link": "/media"
+      "link": "/media",
+      "display": "link"
     },
     {
       "name": "CD",
-      "link": "/cd"
+      "link": "/cd",
+      "display": "link"
     },
     {
       "name": "レパートリー",
-      "link": "/repertoire"
+      "link": "/repertoire",
+      "display": "button"
     },
     {
       "name": "コンタクト",
-      "link": "/contact"
+      "link": "/contact",
+      "display": "primary-button"
     },
     {
       "name": "Books",
-      "link": "/books"
+      "link": "/books",
+      "display": "link"
     },
     {
       "name": "Lessons",
-      "link": "/lessons"
+      "link": "/lessons",
+      "display": "link"
     }
   ]
 }
