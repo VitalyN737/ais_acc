@@ -48,6 +48,15 @@
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
   
+  /* Header CTA buttons: same look regardless of the active route */
+  .cta-repertoire-button {
+    @apply flex items-center justify-center px-5 py-2 rounded-lg border text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-sm bg-white/10 border-white/30 text-white hover:bg-white/20;
+  }
+
+  .cta-contact-button {
+    @apply flex items-center justify-center px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider shadow-lg transition-all cursor-pointer bg-primary text-white shadow-primary/40 hover:scale-105;
+  }
+
   .gradient-bg {
     background: radial-gradient(circle at top left, #0F1D2C 0%, #0A141F 100%);
   }

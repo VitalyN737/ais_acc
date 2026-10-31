@@ -1188,13 +1188,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <div className="flex items-center gap-3">
             <div className="hidden lg:flex gap-3">
               {ctaItems.map((item: { name: string; link: string }) => {
-                const isContact = item.link === '/contact';
-                const baseClass = isContact
-                  ? `flex items-center justify-center px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider shadow-lg transition-all cursor-pointer ${location.pathname === item.link ? 'bg-white primary-text-color' : 'bg-primary text-white shadow-primary/40 hover:scale-105'}`
-                  : `flex items-center justify-center px-5 py-2 rounded-lg border text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-sm ${location.pathname === item.link ? 'bg-white primary-text-color border-white' : 'bg-white/10 border-white/30 text-white hover:bg-white/20'}`;
+                const ctaClass = item.link === '/contact' ? 'cta-contact-button' : 'cta-repertoire-button';
 
                 return (
-                  <Link key={item.link} to={item.link} className={baseClass}>
+                  <Link key={item.link} to={item.link} className={ctaClass}>
                     {item.name}
                   </Link>
                 );
